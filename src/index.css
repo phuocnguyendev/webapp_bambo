@@ -1,0 +1,288 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  /* Colors */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--focus-ring-color);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-outline: var(--outline);
+  --color-outline-foreground: var(--outline-foreground);
+
+  --color-link-foreground: var(--link-foreground);
+  --color-link-hover: var(--link-hover);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-striped: var(--striped);
+  --color-striped-foreground: var(--striped-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-active: var(--active);
+  --color-active-foreground: var(--active);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-navbar: var(--navbar-bg);
+  --color-navbar-foreground: var(--navbar-color);
+  --color-navbar-hover: var(--navbar-hover-bg);
+  --color-navbar-active: var(--navbar-active-bg);
+  --color-navbar-active-foreground: var(--navbar-active-color);
+  --color-nav: var(--nav-submenu-bg);
+  --color-nav-foreground: var(--navbar-nav-color);
+  --color-nav-borderLeft: var(--navbar-nav-border-left);
+
+  --color-table-header: var(--table-header-bg);
+  --color-table-header-foreground: var(--table-header-color);
+
+  --color-danger: var(--danger);
+  --color-danger-dark: var(--danger-dark);
+
+  --color-unit: var(--unit);
+
+  /* Radius (v4: --radius*, -> rounded, rounded-md, rounded-lg, rounded-button) */
+  --radius: var(--border-radius);
+  --radius-lg: var(--border-radius);
+  --radius-md: calc(var(--border-radius) - 2px);
+  --radius-sm: calc(var(--border-radius) - 4px);
+  --radius-button: var(--button-border-radius);
+
+  /* Shadows (v4: --shadow, --shadow-ring -> shadow, shadow-ring) */
+  --shadow: var(--box-shadow);
+  --shadow-ring: var(--focus-ring-shadow);
+
+  /* Fonts */
+  --font-mulish: "Mulish", sans-serif;
+
+  /* Font size base như v3 của bạn */
+  --text-base: 0.875rem;
+  --leading-base: 1.25rem;
+}
+
+
+.dark {}
+
+/* Container giống v3 */
+.container {
+  margin-inline: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: 100%;
+}
+@media (min-width: 1536px){ .container { max-width: 1400px } }
+
+/* Keyframes như v3 */
+@keyframes accordion-down { from{height:0} to{height:var(--radix-accordion-content-height)} }
+@keyframes accordion-up { from{height:var(--radix-accordion-content-height)} to{height:0} }
+@keyframes slide { 0%{transform:translateX(100%)} 100%{transform:translateX(0%)} }
+@keyframes slideReverse { 0%{transform:translateX(-100%)} 100%{transform:translateX(0%)} }
+
+/* Utilities tương đương */
+@utility animate-accordion-down { animation: accordion-down .3s ease-out; }
+@utility animate-accordion-up { animation: accordion-up .3s ease-out; }
+@utility animate-slide { animation: slide .8s ease-in-out; }
+@utility animate-slide-reverse { animation: slideReverse .8s ease-in-out; }
+
+@utility min-h-page-layout { min-height: calc(100vh - 60px); }
+@utility max-h-template-list { max-height: calc(100vh - 360px); }
+@utility max-h-template-points { max-height: calc(100vh - 440px); }
+@utility h-template-points { height: calc(100vh - 440px); }
+
+/* Ví dụ component utility */
+@utility btn {
+  @apply px-4 py-2 rounded-button bg-brand text-white hover:bg-brand/80;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@layer base {
+  :root {
+    /* Base Colors */
+    --white: #fff;
+    --black: #000;
+
+    /* Common Grayscale */
+    --gray-100: #f7fafc;
+    --gray-200: #edf2f7;
+    --gray-300: #e2e8f0;
+    --gray-400: #cbd5e0;
+    --gray-500: #a0aec0;
+    --gray-600: #718096;
+    --gray-700: #4a5568;
+    --gray-800: #2d3748;
+    --gray-900: #1a202c;
+
+    /* Brand Colors */
+    --brand-primary: #d2232a;
+    --brand-secondary: #457b9d;
+
+    /* Functional Colors */
+    --success: #487423;
+    --warning: #f4a261;
+    --danger: #d2232a;
+    --danger-dark: #b51d0d;
+    --accent: #ffe6e8;
+    --active: var(--brand-primary);
+
+    /* Border and Shadow */
+    --border-radius: 0.25rem;
+    --button-border-radius: 0.3125rem;
+    --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+
+    /* Background Colors */
+    --bg-primary: #5b912c;
+    --bg-secondary: #b8b8b8;
+    --bg-body: #f0f3f5;
+    --bg-muted: #eeeeee;
+    --bg-accent: var(--accent);
+
+    /* Text Colors */
+    --text-light: var(--white);
+    --text-dark: #343a40;
+    --text-muted: #777777;
+    --text-accent: #343a40;
+    --text-danger: var(--danger);
+
+    /* Border */
+    --border-color: #f0f3f5;
+
+    /* Focus Ring */
+    --focus-ring-color: #a8dadc;
+    --focus-ring-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+
+    /* Custom Variables (map sang @theme) */
+    --background: var(--bg-body);
+    --foreground: var(--text-dark);
+    --muted: var(--bg-muted);
+    --muted-foreground: var(--text-muted);
+    --striped: rgba(0, 0, 0, 0.03);
+    --striped-foreground: var(--text-muted);
+    --popover: #fff;
+    --popover-foreground: var(--text-dark);
+    --card: #fff;
+    --card-foreground: var(--text-dark);
+    --border: var(--border-color);
+    --input: #a8dadc;
+    --primary: var(--bg-primary);
+    --primary-foreground: var(--text-light);
+    --secondary: var(--bg-secondary);
+    --secondary-foreground: var(--text-light);
+    --success-foreground: var(--text-light);
+    --warning-foreground: var(--text-light);
+    --outline: var(--brand-secondary);
+    --outline-foreground: var(--text-dark);
+    --link-foreground: var(--brand-secondary);
+    --link-hover: var(--active);
+    --accent-foreground: var(--text-accent);
+    --destructive: var(--danger);
+    --destructive-foreground: var(--text-light);
+    --ring: var(--focus-ring-color);
+    --unit: #6c757d;
+
+    /* Navbar Menu */
+    --navbar-bg: var(--white);
+    --navbar-color: var(--text-dark);
+    --navbar-hover-bg: var(--accent);
+    --navbar-active-bg: var(--accent);
+    --navbar-active-color: var(--active);
+    --navbar-nav-bg: var(--white);
+    --navbar-nav-color: var(--text-dark);
+    --navbar-nav-border-left: var(--brand-secondary);
+
+    /* Table */
+    --table-header-bg: var(--brand-secondary);
+    --table-header-color: #fff;
+
+    /* Inventory Margin */
+    --margin-red: #d2232a;
+    --margin-green: #5b912c;
+    --margin-yellow: #ff8d36;
+  }
+
+  *,
+  *::before,
+  *::after {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mulish text-base overflow-hidden;
+  }
+
+  a:hover {
+    @apply text-link-foreground underline;
+  }
+
+  .form-control {
+    @apply flex h-10 w-full rounded border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:shadow-ring focus-visible:ring-ring disabled:cursor-not-allowed;
+  }
+}
