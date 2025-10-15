@@ -1,14 +1,26 @@
-import { createBrowserRouter } from "react-router-dom";
-import { getTokenFromLocalStorage } from "@/lib/auth";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  type RouteObject,
+} from "react-router-dom";
+import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
+import ErrorFallback from "@/components/ErrorFallback";
 import PrivateRoutes from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
-const isAuthenticated = (): boolean => {
-  const { accessToken } = getTokenFromLocalStorage();
-  return !!accessToken;
+
+const AppRouter = () => {
+  const { isAuthenticated } = useAuthContext();
+  console.log("xxxxxx", isAuthenticated);
+
+  const routes: RouteObject[] = isAuthenticated ? PrivateRoutes : PublicRoutes;
+
+  const router = createBrowserRouter([
+    ...routes.map((route) => ({
+      ...route,
+      errorElement: <ErrorFallback />,
+    })),
+  ]);
+  return <RouterProvider router={router} />;
 };
-
-const routes = isAuthenticated() ? PrivateRoutes : PublicRoutes;
-
-const AppRouter = createBrowserRouter(routes);
 
 export default AppRouter;

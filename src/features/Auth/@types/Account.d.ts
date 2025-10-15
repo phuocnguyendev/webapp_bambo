@@ -1,6 +1,6 @@
 type AccountLoginFormValues = {
-  username?: string;
-  password?: string;
+  Email?: string;
+  Password?: string;
 };
 
 type AccountRefreshToken = {

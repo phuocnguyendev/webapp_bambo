@@ -3,8 +3,9 @@ import MainLayout from "@/components/Layout/MainLayout";
 import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+import ErrorFallback from "@/components/ErrorFallback";
 
-const CourseRoutes = lazy(() => import("@/features/course/routes"));
+const CourseRoutes = lazy(() => import("@/features/Course/routes"));
 
 const PrivateLayoutWrapper = () => (
   <MainLayout>
@@ -18,14 +19,12 @@ const PrivateRoutes: RouteObject[] = [
   {
     path: "",
     element: <PrivateLayoutWrapper />,
+    errorElement: <ErrorFallback />,
     children: [
       {
         path: "course/*",
         element: <CourseRoutes />,
-      },
-      {
-        index: true,
-        element: <CourseRoutes />,
+        errorElement: <ErrorFallback />,
       },
     ],
   },

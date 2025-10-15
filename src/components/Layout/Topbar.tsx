@@ -1,25 +1,35 @@
-import logo from "@/assets/images/logo.svg";
-import { Button } from "../ui/button";
 import TopNavbar from "./TopNavbar";
 import { Link } from "react-router-dom";
+
 const Logo = () => (
-  <Link to="/">
-    <img src={logo} alt="Logo" />
+  <Link to="/" className="flex items-center gap-2">
+    <img
+      src={"/contents/logo.png"}
+      alt="Logo"
+      className="h-10 w-10 object-contain rounded-full shadow"
+    />
+    <span className="hidden md:inline font-bold text-xl text-green-700 tracking-tight drop-shadow-sm">
+      Bamboo Warehouse
+    </span>
   </Link>
 );
 
 export default function TopBar() {
   return (
-    <header className="fixed z-50 top-0 left-0 w-full h-[60px] bg-white shadow p-4 flex justify-between items-center">
-      <div className="flex items-center space-x-2">
-        <Button
-          size="icon"
-          variant="secondary"
-          className="lg:hidden bg-transparent text-brand-primary"
-        ></Button>
+    <header
+      className="sticky z-40 top-0 left-0 w-full h-[54px] bg-white flex items-center px-4"
+      style={{
+        boxShadow:
+          "0 4px 24px 0 rgba(0,0,0,0.10), 0 1.5px 4px 0 rgba(0,0,0,0.08)",
+      }}
+    >
+      <div className="flex items-center min-w-[200px]">
         <Logo />
       </div>
-      <TopNavbar />
+      <div className="flex-1" />
+      <div className="flex items-center min-w-[180px] justify-end">
+        <TopNavbar />
+      </div>
     </header>
   );
 }

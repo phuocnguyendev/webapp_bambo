@@ -2,8 +2,8 @@ import { Spin } from "@/components/ui/spin";
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const LoginPage = lazy(() => import("../Auth/pages/LoginPage"));
+const SignUpPage = lazy(() => import("../Auth/pages/SignUpPage"));
 
 export default function AuthRoutes() {
   return (

@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
-import parse from 'html-react-parser';
+import { useTranslation } from "react-i18next";
+import parse from "html-react-parser";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from './ui/alert-dialog';
+} from "./ui/alert-dialog";
 
 interface CustomAlertProps {
   title: string;
@@ -35,7 +35,6 @@ const CustomAlert = ({
   if (!open) {
     return null;
   }
-
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent className="max-w-xl">
@@ -49,12 +48,12 @@ const CustomAlert = ({
         <AlertDialogFooter>
           {showClose && (
             <AlertDialogCancel type="button" onClick={onClose}>
-              {t('button.close')}
+              {t("button.close")}
             </AlertDialogCancel>
           )}
           {showConfirm && (
             <AlertDialogAction type="button" onClick={onConfirm}>
-              {t('button.yes')}
+              {t("button.yes")}
             </AlertDialogAction>
           )}
         </AlertDialogFooter>

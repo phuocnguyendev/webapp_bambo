@@ -9,8 +9,8 @@ export default function CourseRoutes() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        <Route path=":courseBook" element={<CourseManagement />} />
-        <Route path=":courseBook/:id" element={<CourseDetailPage />} />
+        <Route path="" element={<CourseManagement />} />
+        <Route path=":id" element={<CourseDetailPage />} />
       </Routes>
     </Suspense>
   );

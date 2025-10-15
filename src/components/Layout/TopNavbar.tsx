@@ -1,4 +1,3 @@
-import { NLFlag, UKFlag } from "@/components/icons/flags";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,57 +32,11 @@ const UserMenu = () => {
   );
 };
 
-const LanguageMenu = () => {
-  const { i18n } = useTranslation();
-
-  const handleChange = (lang: "en" | "nl") => {
-    i18n.changeLanguage(lang).then(() => {
-      window.location.reload();
-    });
-  };
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="h-10 w-10 rounded-full bg-background">
-        {i18n.language === "en" ? (
-          <UKFlag className="h-8 w-8 rounded-full object-cover m-auto" />
-        ) : (
-          <NLFlag className="h-8 w-8 rounded-full object-cover m-auto" />
-        )}
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => handleChange("en")}
-        >
-          <div className="inline-flex space-x-2">
-            <UKFlag />
-            <span className="my-auto">English</span>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => handleChange("nl")}
-        >
-          <div className="inline-flex space-x-2">
-            <NLFlag />
-            <span className="my-auto">Dutch</span>
-          </div>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
-
 export default function TopNavbar() {
   return (
     <ul className="flex items-center space-x-5">
       <li>
         <UserMenu />
-      </li>
-      <li>
-        <LanguageMenu />
       </li>
     </ul>
   );
