@@ -1,3 +1,4 @@
+import { path } from "@/constants/path";
 import {
   createContext,
   useCallback,
@@ -6,27 +7,32 @@ import {
   useState,
 } from "react";
 import { clearTokens, getUserIdFromToken } from "../utils/utils";
-import { path } from "@/constants/path";
 
 export interface AuthContextType {
   isAuthenticated: boolean;
   saveToken: (responseData: RefreshTokenResponse) => void;
   isLoading?: boolean;
   isAuthChecked: boolean;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = localStorage.getItem("accessToken");
+    const extractedUserId = token ? getUserIdFromToken(token) : null;
+    console.log("Auth init - token:", !!token, "userId:", !!extractedUserId);
+    return !!extractedUserId;
+  });
+  const isAuthChecked = true;
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     const extractedUserId = token ? getUserIdFromToken(token) : null;
+    console.log("Auth effect - token:", !!token, "userId:", !!extractedUserId);
     setIsAuthenticated(!!extractedUserId);
-    setIsAuthChecked(true);
   }, []);
 
   const loginAccount = useCallback((responseData: RefreshTokenResponse) => {
@@ -40,17 +46,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  const logout = useCallback(() => {
+    clearTokens();
+    setIsAuthenticated(false);
+    window.location.replace(path.login);
+  }, []);
+
   const contextValue = useMemo<AuthContextType>(
     () => ({
       isAuthenticated,
       saveToken: loginAccount,
       isAuthChecked,
-      logout: () => {
-        clearTokens();
-        window.location.replace(path.login);
-      },
+      logout,
     }),
-    [isAuthenticated, loginAccount, isAuthChecked]
+    [isAuthenticated, loginAccount, isAuthChecked, logout]
   );
 
   return (

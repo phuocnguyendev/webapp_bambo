@@ -9,9 +9,9 @@ export default function AuthRoutes() {
   return (
     <Suspense fallback={<Spin />}>
       <Routes>
-        <Route path="*" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="*" element={<LoginPage />} />
       </Routes>
     </Suspense>
   );

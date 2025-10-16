@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import {
-  useAccountList,
-  useGetDetailAccount,
-  useDeleteAccount,
-} from "../hooks/useAccount";
 import ErrorFallback from "@/components/ErrorFallback";
 import { PaginationTable } from "@/components/PaginationTable";
 import Title from "@/components/ui/title";
-import useQueryConfig from "../hooks/useQueryConfig";
-import { getAccountColumns } from "../config/accountConfig";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import CreateUpdateAccountModal from "../components/ModalCreateUpdate";
+import { getAccountColumns } from "../config/accountConfig";
+import {
+  useAccountList,
+  useDeleteAccount,
+  useGetDetailAccount,
+} from "../hooks/useAccount";
+import useQueryConfig from "../hooks/useQueryConfig";
 
 export default function AccountList() {
   const { data, isLoading, isError } = useAccountList();

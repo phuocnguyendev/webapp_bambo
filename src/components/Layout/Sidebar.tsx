@@ -1,23 +1,26 @@
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "../ui/scroll-area";
-import { NavLink, useLocation } from "react-router-dom";
-import { MenuConfig } from "./MenuConfig";
-import type { SidebarMenuItem as SidebarMenuItemType } from "./MenuConfig";
-import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { ScrollArea } from "../ui/scroll-area";
+import type { SidebarMenuItem as SidebarMenuItemType } from "./MenuConfig";
+import { MenuConfig } from "./MenuConfig";
 
 type Props = {
   className?: string;
+  isCollapsed?: boolean;
 };
 
 function SidebarMenuItem({
   item,
   level = 0,
   parentPath = "",
+  isCollapsed = false,
 }: {
   item: SidebarMenuItemType;
   level?: number;
   parentPath?: string;
+  isCollapsed?: boolean;
 }) {
   const location = useLocation();
   const fullPath = item.path.startsWith("/")
@@ -59,17 +62,22 @@ function SidebarMenuItem({
         end
         onClick={handleParentClick}
         aria-expanded={item.children ? open : undefined}
+        title={isCollapsed ? item.label : undefined}
       >
-        <div className="text-base flex-shrink-0">{item.icon}</div>{" "}
-        <span className="text-sm drop-shadow-sm">{item.label}</span>
-        {item.children && (
-          <span className="ml-auto text-xs text-gray-500">
-            {open ? <ChevronUp /> : <ChevronDown />}
-          </span>
+        <div className="text-base flex-shrink-0">{item.icon}</div>
+        {!isCollapsed && (
+          <>
+            <span className="text-sm drop-shadow-sm">{item.label}</span>
+            {item.children && (
+              <span className="ml-auto text-xs text-gray-500">
+                {open ? <ChevronUp /> : <ChevronDown />}
+              </span>
+            )}
+          </>
         )}
       </NavLink>
 
-      {item.children && open && (
+      {item.children && open && !isCollapsed && (
         <div className="ml-4 border-l border-gray-200 pl-3">
           {item.children.map((child: SidebarMenuItemType) => (
             <SidebarMenuItem
@@ -77,6 +85,7 @@ function SidebarMenuItem({
               item={child}
               level={level + 1}
               parentPath={fullPath}
+              isCollapsed={isCollapsed}
             />
           ))}
         </div>
@@ -84,24 +93,37 @@ function SidebarMenuItem({
     </div>
   );
 }
-export default function Sidebar({ className }: Props) {
+export default function Sidebar({ isCollapsed = false }: Props) {
   return (
-    <ScrollArea
-      type="hover"
-      className={cn("h-full lg:h-[calc(100vh-60px)]", className)}
+    <aside
+      className={cn(
+        "p-4 transition-all duration-300 h-full flex flex-col",
+        isCollapsed && "px-2"
+      )}
     >
-      <aside className="p-4">
-        <div className="flex flex-col items-center mb-6">
-          <img
-            src="/contents/logo.png"
-            alt="Logo"
-            className="w-20 h-20 object-contain rounded-lg shadow"
-          />
-        </div>
+      <div className="flex flex-col items-center mb-6">
+        <img
+          src="/contents/logo.png"
+          alt="Logo"
+          className={cn(
+            "object-contain rounded-lg shadow transition-all duration-300",
+            isCollapsed ? "w-10 h-10" : "w-20 h-20"
+          )}
+        />
+      </div>
+      <ScrollArea
+        type="hover"
+        className="flex-1 min-h-0"
+        style={{ maxHeight: "calc(100vh - 120px)" }}
+      >
         {MenuConfig.map((item: SidebarMenuItemType) => (
-          <SidebarMenuItem key={item.label} item={item} />
+          <SidebarMenuItem
+            key={item.label}
+            item={item}
+            isCollapsed={isCollapsed}
+          />
         ))}
-      </aside>
-    </ScrollArea>
+      </ScrollArea>
+    </aside>
   );
 }

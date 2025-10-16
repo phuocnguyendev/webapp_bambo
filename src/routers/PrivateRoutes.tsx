@@ -1,16 +1,21 @@
+import ErrorFallback from "@/components/ErrorFallback";
+import MainLayout from "@/components/Layout/MainLayout";
+import { Spin } from "@/components/ui/spin";
+import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
 import { lazy, Suspense, type JSX } from "react";
 import { Navigate, Outlet, type RouteObject } from "react-router-dom";
-import { Spin } from "@/components/ui/spin";
-import MainLayout from "@/components/Layout/MainLayout";
-import ErrorFallback from "@/components/ErrorFallback";
-import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
 
 const CourseRoutes = lazy(() => import("@/features/Course/routes"));
 const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
-  // while auth is being checked, avoid redirecting — show a spinner
+  console.log(
+    "ProtectedRoute - isAuthChecked:",
+    isAuthChecked,
+    "isAuthenticated:",
+    isAuthenticated
+  );
   if (!isAuthChecked) return <Spin />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   return children;

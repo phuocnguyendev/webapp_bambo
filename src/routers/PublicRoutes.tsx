@@ -1,9 +1,9 @@
+import ErrorFallback from "@/components/ErrorFallback";
 import DefaultLayout from "@/components/Layout/DefaultLayout";
 import { Spin } from "@/components/ui/spin";
 import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import ErrorFallback from "@/components/ErrorFallback";
 
 const AuthRoutes = lazy(() => import("@/features/Auth/routes"));
 
@@ -17,14 +17,24 @@ const PublicLayoutWrapper = () => (
 
 const PublicRoutes: RouteObject[] = [
   {
-    path: "",
+    path: "/login",
     element: <PublicLayoutWrapper />,
     errorElement: <ErrorFallback />,
     children: [
       {
-        path: "*",
+        path: "",
         element: <AuthRoutes />,
-        errorElement: <ErrorFallback />,
+      },
+    ],
+  },
+  {
+    path: "/signup",
+    element: <PublicLayoutWrapper />,
+    errorElement: <ErrorFallback />,
+    children: [
+      {
+        path: "",
+        element: <AuthRoutes />,
       },
     ],
   },
