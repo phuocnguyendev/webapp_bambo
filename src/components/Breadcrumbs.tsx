@@ -25,7 +25,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
   return (
     <nav className="flex items-center space-x-1 text-base font-medium my-2">
       <Link to="/" className="flex items-center text-green-700 hover:underline">
-        <Home className="mr-1 w-5 h-5" /> Trang chủ
+        <Home className="mr-1 w-4 h-4" /> Trang chủ
       </Link>
       {crumbs.map((item, idx) => (
         <React.Fragment key={item.path}>

@@ -4,8 +4,9 @@ import ErrorFallback from "@/components/ErrorFallback";
 import { path } from "@/constants/path";
 
 const NotFoundHandler = () => {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, isAuthChecked } = useAuthContext();
 
+  if (!isAuthChecked) return <ErrorFallback />; // placeholder while checking
   if (!isAuthenticated) return <Navigate to={path.login} replace />;
 
   return <ErrorFallback />;

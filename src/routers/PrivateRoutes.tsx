@@ -6,9 +6,12 @@ import ErrorFallback from "@/components/ErrorFallback";
 import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
 
 const CourseRoutes = lazy(() => import("@/features/Course/routes"));
+const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, isAuthChecked } = useAuthContext();
+  // while auth is being checked, avoid redirecting — show a spinner
+  if (!isAuthChecked) return <Spin />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   return children;
 };
@@ -34,7 +37,11 @@ const PrivateRoutes: RouteObject[] = [
         element: <CourseRoutes />,
         errorElement: <ErrorFallback />,
       },
-      // If authenticated but route not found under private layout, show ErrorFallback
+      {
+        path: "QuanLyTaiKhoan/*",
+        element: <AccountRoutes />,
+        errorElement: <ErrorFallback />,
+      },
       {
         path: "*",
         element: <ErrorFallback />,

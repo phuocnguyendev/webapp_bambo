@@ -29,7 +29,7 @@ export const MenuConfig: SidebarMenuItem[] = [
   },
   {
     label: "Quản lý tài khoản",
-    path: "/auth",
+    path: "/QuanLyTaiKhoan",
     icon: <User size={20} />,
   },
   {

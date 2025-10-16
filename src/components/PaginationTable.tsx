@@ -75,7 +75,6 @@ interface PaginationTableProps<T> {
   onRowClick?: (row: Row<T>) => void;
   onCellClick?: (cell: Cell<T, unknown>) => void;
 
-  // react-table state & events
   tableState?: Partial<TableState> | undefined;
   onSortingChange?: (sorting: SortingState) => void;
 
@@ -119,7 +118,6 @@ const PaginationTable = <T,>({
     manualSorting: true,
     state: tableState,
   });
-
   return (
     <div className="flex flex-col space-y-4 w-full">
       <Table className={tableClassName} id={id}>
@@ -293,11 +291,9 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
           options={sizeOptions}
         />
         <p>
-          {t("table.paginationResults", {
-            from: startIndex,
-            to: endIndex,
-            total,
-          })}
+          <span className="ml-2 text-sm text-muted-foreground">
+            {`Hiển thị ${startIndex} đến ${endIndex} của ${total} kết quả`}
+          </span>
         </p>
       </div>
 

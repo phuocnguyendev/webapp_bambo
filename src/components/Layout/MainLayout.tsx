@@ -19,10 +19,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </aside>
       <div className="flex-1 flex flex-col min-h-screen">
         <TopBar />
-        <main className="flex-1 p-4 bg-white">
-          {!isHome && <Breadcrumbs />}
-          {children}
-        </main>
+        <div className="w-full px-8">{!isHome && <Breadcrumbs />}</div>
+        <main className="flex-1 pt-6 px-4 bg-gray-50">{children}</main>
       </div>
     </div>
   );

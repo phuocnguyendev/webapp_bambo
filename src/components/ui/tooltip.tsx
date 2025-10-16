@@ -27,3 +27,26 @@ const TooltipContent = React.forwardRef<TooltipContentRef, TooltipContentProps>(
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+
+type TooltipSimpleProps = {
+  title: React.ReactNode;
+  side?: "top" | "right" | "bottom" | "left";
+  children: React.ReactElement;
+};
+
+const TooltipSimple: React.FC<TooltipSimpleProps> = ({
+  title,
+  side = "top",
+  children,
+}) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent side={side}>{title}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+export { TooltipSimple };
