@@ -3,24 +3,22 @@ import {
   RouterProvider,
   type RouteObject,
 } from "react-router-dom";
-import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
 import ErrorFallback from "@/components/ErrorFallback";
 import PrivateRoutes from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
+import NotFoundHandler from "@/components/NotFoundHandler";
 
-const AppRouter = () => {
-  const { isAuthenticated } = useAuthContext();
-  console.log("xxxxxx", isAuthenticated);
+const combinedRoutes: RouteObject[] = [...PrivateRoutes, ...PublicRoutes];
 
-  const routes: RouteObject[] = isAuthenticated ? PrivateRoutes : PublicRoutes;
+combinedRoutes.push({ path: "*", element: <NotFoundHandler /> });
 
-  const router = createBrowserRouter([
-    ...routes.map((route) => ({
-      ...route,
-      errorElement: <ErrorFallback />,
-    })),
-  ]);
-  return <RouterProvider router={router} />;
-};
+const router = createBrowserRouter(
+  combinedRoutes.map((route) => ({
+    ...route,
+    errorElement: <ErrorFallback />,
+  }))
+);
+
+const AppRouter = () => <RouterProvider router={router} />;
 
 export default AppRouter;

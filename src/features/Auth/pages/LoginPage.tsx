@@ -53,6 +53,7 @@ const LoginPage = () => {
       setLoading(false);
     });
   };
+
   return (
     <div className="flex flex-1 items-center justify-center p-6">
       <Card className="w-[500px] shadow-2xl p-2">

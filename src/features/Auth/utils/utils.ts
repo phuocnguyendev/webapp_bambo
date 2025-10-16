@@ -1,7 +1,16 @@
 import { jwtDecode } from "jwt-decode";
+
+export interface JwtPayload {
+  sub: string;
+  role: string;
+  iss: string;
+  iat: number;
+  exp: number;
+}
+
 export const getUserIdFromToken = (token: string) => {
   try {
-    const decodedToken: any = jwtDecode(token);
+    const decodedToken: JwtPayload = jwtDecode(token);
     const userId = decodedToken["sub"];
     localStorage.setItem("userId", userId);
     return userId;
