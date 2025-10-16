@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// label is provided via FormLabel wrapper; no direct import needed here
 import { Switch } from "@/components/ui/switch";
 import { Select } from "@/components/ui/select";
 import {
@@ -27,17 +26,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateAccount, useUpdateAccount } from "../hooks/useAccount";
-
-type Account = {
-  Name: string;
-  Email: string;
-  Avatar_url: string;
-  Status: boolean;
-  Phone: string;
-  RoleId: string;
-};
-
-type AccountUpdate = Account & { Id: string };
+import { AccountSchema } from "../rules/validationSchema";
 
 type Props = {
   open: boolean;
@@ -45,21 +34,7 @@ type Props = {
   onOpenChange: (open: boolean) => void;
 };
 
-const schema = z.object({
-  Name: z.string().min(2, { error: "Tên tối thiểu 2 ký tự" }),
-  Email: z.string().email({ error: "Email không hợp lệ" }),
-  Phone: z
-    .string()
-    .min(8, { error: "Số điện thoại tối thiểu 8 ký tự" })
-    .max(20, { error: "Số điện thoại quá dài" }),
-  Avatar_url: z
-    .string()
-    .url({ error: "Avatar URL không hợp lệ" })
-    .or(z.literal("").transform(() => "")),
-  Status: z.boolean(),
-  RoleId: z.string().min(1, { error: "Vui lòng chọn vai trò" }),
-});
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof AccountSchema>;
 
 export default function CreateUpdateAccountModal({
   open,
@@ -67,7 +42,7 @@ export default function CreateUpdateAccountModal({
   onOpenChange,
 }: Props) {
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(AccountSchema),
     defaultValues: {
       Name: "",
       Email: "",
@@ -107,16 +82,18 @@ export default function CreateUpdateAccountModal({
   );
 
   const queryClient = useQueryClient();
-  const createMutation = useCreateAccount();
-  const updateMutation = useUpdateAccount();
+  const { mutateAsync: createMutation, isPending: isCreating } =
+    useCreateAccount();
+  const { mutateAsync: updateMutation, isPending: isUpdating } =
+    useUpdateAccount();
 
   const handleSubmit = form.handleSubmit(async (values) => {
     try {
       if (!defaultValues?.Id) {
-        await createMutation.mutateAsync(values as unknown as Account);
+        await createMutation(values as unknown as Account);
         toast({ title: "Tạo tài khoản thành công" });
       } else {
-        await updateMutation.mutateAsync({
+        await updateMutation({
           ...(values as unknown as Account),
           Id: defaultValues.Id,
         } as AccountUpdate);
@@ -288,15 +265,8 @@ export default function CreateUpdateAccountModal({
               >
                 Hủy
               </Button>
-              <Button
-                type="submit"
-                disabled={
-                  createMutation.status === "pending" ||
-                  updateMutation.status === "pending"
-                }
-              >
-                {createMutation.status === "pending" ||
-                updateMutation.status === "pending"
+              <Button type="submit" disabled={isCreating || isUpdating}>
+                {isCreating || isUpdating
                   ? defaultValues?.Id
                     ? "Đang lưu…"
                     : "Đang tạo…"

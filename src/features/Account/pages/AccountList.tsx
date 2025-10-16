@@ -30,10 +30,6 @@ export default function AccountList() {
 
   const currentPage = queryParams.page ?? 1;
   const pageSize = queryParams.pageSize ?? 10;
-  const handleView = (item: AccountListResponse) => {
-    setSelectedId(item.Id);
-    setModalOpen(true);
-  };
 
   const handleEdit = (item: AccountListResponse) => {
     setSelectedId(item.Id);
@@ -50,7 +46,6 @@ export default function AccountList() {
   };
 
   const columns = (getAccountColumns as any)(currentPage, pageSize, {
-    onView: handleView,
     onEdit: handleEdit,
     onDelete: handleDelete,
   });

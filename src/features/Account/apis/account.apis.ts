@@ -23,11 +23,8 @@ const accountApis = {
   GetById: (id: string) => {
     return HttpService.GET<ResponseApi<Account>>(`/${endPoint}/GetById/${id}`);
   },
-  Update: (id: string, data: Account) => {
-    return HttpService.PUT<ResponseApi<Account>>(
-      `/${endPoint}/Update/${id}`,
-      data
-    );
+  Update: (data: Account) => {
+    return HttpService.PUT<ResponseApi<Account>>(`/${endPoint}/Update`, data);
   },
   Delete: (id: string) => {
     return HttpService.DELETE<ResponseApi<Account>>(

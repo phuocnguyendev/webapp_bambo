@@ -34,7 +34,7 @@ export const useAccountList = () => {
 export const useUpdateAccount = () => {
   const mutation = useMutation({
     mutationFn: async (data: AccountUpdate) => {
-      const resp = await accountApis.Update(data.Id, data);
+      const resp = await accountApis.Update(data);
       return resp.data.Item;
     },
   });

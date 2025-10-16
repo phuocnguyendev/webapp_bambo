@@ -14,7 +14,6 @@ export function getAccountColumns(
   currentPage: number,
   pageSize: number,
   handlers?: {
-    onView?: (item: AccountListResponse) => void;
     onEdit?: (item: AccountListResponse) => void;
     onDelete?: (item: AccountListResponse) => void;
   }
@@ -60,8 +59,6 @@ export function getAccountColumns(
       cell: ({ row }: { row: Row<AccountListResponse> }) => {
         const item = row.original;
 
-        const handleView = () =>
-          handlers?.onView ? handlers.onView(item) : console.log("View", item);
         const handleEdit = () =>
           handlers?.onEdit ? handlers.onEdit(item) : console.log("Edit", item);
         const handleDelete = () =>
@@ -71,16 +68,7 @@ export function getAccountColumns(
 
         return (
           <div className="flex items-center gap-2 relative">
-            <TooltipSimple title="Xem">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleView}
-                className="h-9 w-9 p-0 rounded-md border border-input bg-background hover:bg-muted hover:text-foreground"
-                icon={<Eye size={16} />}
-              />
-            </TooltipSimple>
-            <TooltipSimple title="Sửa">
+            <TooltipSimple title="Cập nhật">
               <Button
                 variant="outline"
                 size="icon"
@@ -91,12 +79,12 @@ export function getAccountColumns(
             </TooltipSimple>
             <div className="relative">
               <DropdownMenu>
-                <TooltipSimple title="Thêm">
+                <TooltipSimple title="Tùy chọn">
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Thêm hành động"
+                      aria-label="Tùy chọn"
                       className="h-9 w-9 p-0 rounded-md border border-input bg-background hover:bg-muted"
                       icon={<EllipsisVertical size={18} />}
                     />
