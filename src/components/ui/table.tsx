@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
-import { useTranslation } from 'react-i18next';
-import { Spin } from './spin';
+import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { Spin } from "./spin";
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -11,12 +11,12 @@ const Table = React.forwardRef<
   <div className="relative w-full overflow-auto">
     <table
       ref={ref}
-      className={cn('w-full caption-bottom text-sm', className)}
+      className={cn("w-full caption-bottom text-sm", className)}
       {...props}
     />
   </div>
 ));
-Table.displayName = 'Table';
+Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
@@ -25,13 +25,13 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      '[&_tr]:border-b bg-table-header whitespace-nowrap',
-      className,
+      "[&_tr]:border-b bg-table-header whitespace-nowrap",
+      className
     )}
     {...props}
   />
 ));
-TableHeader.displayName = 'TableHeader';
+TableHeader.displayName = "TableHeader";
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
@@ -39,11 +39,11 @@ const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn('[&_tr:last-child]:border-0', className)}
+    className={cn("[&_tr:last-child]:border-0", className)}
     {...props}
   />
 ));
-TableBody.displayName = 'TableBody';
+TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
@@ -52,13 +52,13 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
-      className,
+      "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
+      className
     )}
     {...props}
   />
 ));
-TableFooter.displayName = 'TableFooter';
+TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
@@ -67,13 +67,13 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b transition-colors hover:bg-accent group-hover:bg-transparent data-[state=selected]:bg-accent even:bg-striped',
-      className,
+      "border-b transition-colors hover:bg-muted group-hover:bg-transparent data-[state=selected]:bg-muted even:bg-striped",
+      className
     )}
     {...props}
   />
 ));
-TableRow.displayName = 'TableRow';
+TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
@@ -82,13 +82,13 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-4 text-left align-middle font-medium text-table-header-foreground',
-      className,
+      "h-12 px-4 text-left align-middle font-medium text-table-header-foreground",
+      className
     )}
     {...props}
   />
 ));
-TableHead.displayName = 'TableHead';
+TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
@@ -96,11 +96,11 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('p-3 align-middle break-all', className)}
+    className={cn("p-3 align-middle break-all", className)}
     {...props}
   />
 ));
-TableCell.displayName = 'TableCell';
+TableCell.displayName = "TableCell";
 
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
@@ -108,11 +108,11 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn('mt-4 text-sm text-muted-foreground', className)}
+    className={cn("mt-4 text-sm text-muted-foreground", className)}
     {...props}
   />
 ));
-TableCaption.displayName = 'TableCaption';
+TableCaption.displayName = "TableCaption";
 
 const TableOverlay = React.forwardRef<
   HTMLDivElement,
@@ -121,13 +121,13 @@ const TableOverlay = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      'absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 z-10',
-      className,
+      "absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 z-10",
+      className
     )}
     {...props}
   />
 ));
-TableOverlay.displayName = 'TableOverlay';
+TableOverlay.displayName = "TableOverlay";
 
 const TableRowLoading = ({ colSpan }: { colSpan: number }) => (
   <TableRow>
@@ -142,7 +142,7 @@ const NoDataTable = ({ colSpan }: { colSpan: number }) => {
   return (
     <TableRow>
       <TableCell colSpan={colSpan} className="text-center font-semibold">
-        {t('label.noResult')}
+        {t("label.noResult")}
       </TableCell>
     </TableRow>
   );

@@ -4,6 +4,7 @@ import Title from "@/components/ui/title";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import CreateUpdateAccountModal from "../components/ModalCreateUpdate";
+import { CirclePlus } from "lucide-react";
 import { getAccountColumns } from "../config/accountConfig";
 import {
   useAccountList,
@@ -11,6 +12,7 @@ import {
   useGetDetailAccount,
 } from "../hooks/useAccount";
 import useQueryConfig from "../hooks/useQueryConfig";
+import { Button } from "@/components/ui/button";
 
 export default function AccountList() {
   const { data, isLoading, isError } = useAccountList();
@@ -36,6 +38,11 @@ export default function AccountList() {
     setModalOpen(true);
   };
 
+  const handleCreate = () => {
+    setSelectedId(null);
+    setModalOpen(true);
+  };
+
   const handleDelete = async (item: any) => {
     if (!window.confirm("Bạn có chắc muốn xóa tài khoản này không?")) return;
     deleteMutation.mutate(item.Id, {
@@ -49,11 +56,19 @@ export default function AccountList() {
     onEdit: handleEdit,
     onDelete: handleDelete,
   });
-
   return (
     <div className="px-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-2">
         <Title title="Quản lý tài khoản" />
+      </div>
+      <div className="mb-2">
+        <Button
+          variant="default"
+          onClick={handleCreate}
+          icon={<CirclePlus size={16} />}
+        >
+          Thêm mới
+        </Button>
       </div>
 
       <PaginationTable
@@ -66,12 +81,12 @@ export default function AccountList() {
         onPageSizeChange={(s) =>
           setQueryParams({ ...queryParams, pageSize: s, page: 1 })
         }
-        tableHeaderClassName="bg-green-700 text-white"
+        tableHeaderClassName="bg-green-700 text-white rounded-t-lg"
       />
 
       <CreateUpdateAccountModal
         open={modalOpen}
-        defaultValues={detailData}
+        data={detailData}
         onOpenChange={(open) => {
           setModalOpen(open);
           if (!open) setSelectedId(null);

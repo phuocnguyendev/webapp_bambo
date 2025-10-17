@@ -1,29 +1,36 @@
 import RcSelect from "react-select";
 import RcAsyncSelect from "react-select/async";
 import { useTheme } from "styled-components";
-import type { Theme } from "@/utils/theme";
 
 import { cn } from "@/lib/utils";
 import React from "react";
+import type { Theme } from "@/utils/theme";
 
 interface SelectProps extends React.ComponentPropsWithoutRef<typeof RcSelect> {
   disabled?: boolean;
+  hasError?: boolean;
 }
 interface AsyncSelectProps
   extends React.ComponentPropsWithoutRef<typeof RcAsyncSelect> {
   disabled?: boolean;
 }
 
-const getCustomStyles = (theme: Theme) => ({
+const getCustomStyles = (theme: Theme, hasError?: boolean) => ({
   control: (provided: any, state: any) => ({
     ...provided,
     minHeight: "2.5rem",
-    background: state.isDisabled ? "bg-muted" : "transparent",
-    border: `${state.isDisabled ? 0 : 1}px solid ${theme.colors.input}`,
+    background: state.isDisabled ? theme.colors.muted : "transparent",
+    border: `${state.isDisabled ? 0 : 1}px solid ${
+      hasError ? "#d2232a" : theme.colors.input
+    }`,
     borderRadius: theme?.borderRadius?.DEFAULT,
-    boxShadow: state.isFocused ? theme.boxShadow.ring : "none",
+    boxShadow: state.isFocused
+      ? hasError
+        ? `0 0 0 2px ${theme.colors.destructive}`
+        : theme.boxShadow.ring
+      : "none",
     "&:hover": {
-      borderColor: theme.colors.input,
+      borderColor: hasError ? theme.colors.destructive : theme.colors.input,
     },
   }),
   option: (provided: any, state: any) => ({
@@ -31,33 +38,26 @@ const getCustomStyles = (theme: Theme) => ({
     backgroundColor: state.isSelected
       ? theme.colors.accent.DEFAULT
       : "transparent",
-    color: state.isSelected ? "var(--active)" : theme.colors.foreground,
+    color: state.isSelected
+      ? theme.colors.accent.foreground
+      : theme.colors.foreground,
     opacity: state.isDisabled && !state.isSelected ? 0.5 : 1,
     "&:hover": {
       backgroundColor: !state.isSelected ? theme.colors.accent.DEFAULT : "",
       color: theme.colors.accent.foreground,
       cursor: state.isDisabled ? "not-allowed" : "pointer",
     },
-    "&.focus": {
-      backgroundColor: theme.colors.accent.DEFAULT,
-      color: theme.colors.accent.foreground,
-    },
   }),
-  input: (provided: any, state: any) => ({
-    ...provided,
-    cursor: state.isDisabled ? "not-allowed" : "default",
-  }),
-  singleValue: (provided: any) => ({
-    ...provided,
-    color: theme.colors.foreground,
-  }),
+  singleValue: (p: any) => ({ ...p, color: theme.colors.foreground }),
+  menuPortal: (base: any) => ({ ...base, zIndex: 99999 }),
+  menu: (base: any) => ({ ...base, zIndex: 99999 }),
 });
 
 const classNames = {
   container: () => "relative",
   control: () => "flex w-full items-center justify-between rounded-md text-sm",
   menu: () =>
-    "z-50 max-h-96 min-w-[8rem] rounded-md border bg-popover text-popover-foreground shadow-md",
+    "max-h-96 min-w-[8rem] rounded-md border bg-popover text-popover-foreground shadow-md",
   menuList: () => "space-y-1",
   option: (state: any) =>
     cn(
@@ -66,62 +66,40 @@ const classNames = {
     ),
 };
 
-const Select = React.forwardRef<React.ElementRef<typeof RcSelect>, SelectProps>(
-  (
-    {
-      className,
-      styles,
-      disabled,
-      isDisabled,
-      menuPortalTarget = document.body,
-      ...props
+const Select = React.forwardRef<
+  React.ComponentRef<typeof RcSelect>,
+  SelectProps
+>(({ className, styles, disabled, isDisabled, hasError, ...props }, ref) => {
+  const theme = useTheme() as Theme;
+
+  const customStyles = getCustomStyles(theme, hasError);
+
+  const mergedStyles = {
+    ...customStyles,
+    ...(styles || {}),
+    control: (provided: any, state: any) => {
+      if (styles?.control) {
+        return styles.control(provided, state);
+      }
+      return customStyles.control(provided, state);
     },
-    ref
-  ) => {
-    const theme = useTheme() as import("@/utils/theme").Theme;
-    const customStyles = getCustomStyles(theme);
-
-    return (
-      <RcSelect
-        {...props}
-        ref={ref}
-        isDisabled={disabled || isDisabled}
-        className={cn("react-select-container w-full", className)}
-        classNamePrefix="react-select"
-        styles={{ ...styles, ...customStyles }}
-        classNames={classNames}
-        menuPortalTarget={menuPortalTarget}
-      />
-    );
-  }
-);
-
-Select.displayName = "Select component";
-
-const AsyncSelect = React.forwardRef<
-  React.ElementRef<typeof RcAsyncSelect>,
-  AsyncSelectProps
->(({ className, styles, disabled, isDisabled, ...props }, ref) => {
-  const theme = useTheme() as import("@/utils/theme").Theme;
-  const customStyles = getCustomStyles(theme);
+  };
 
   return (
-    <RcAsyncSelect
-      isDisabled={disabled || isDisabled}
-      cacheOptions={true}
-      className={cn("react-select-container w-full", className)}
-      classNamePrefix="react-select"
-      styles={{ ...styles, ...customStyles }}
-      classNames={classNames}
-      menuPortalTarget={document.body}
-      menuPlacement="auto"
-      ref={ref}
+    <RcSelect
       {...props}
+      ref={ref}
+      isDisabled={disabled || isDisabled}
+      className={cn("react-select-container w-full rounded-lg", className)}
+      classNamePrefix="react-select"
+      styles={mergedStyles}
+      classNames={classNames}
+      placeholder="Chọn..."
     />
   );
 });
 
-AsyncSelect.displayName = "AsyncSelect";
+Select.displayName = "Select component";
 
-export { AsyncSelect, Select };
+export { Select };
 export type { AsyncSelectProps, SelectProps };

@@ -47,7 +47,7 @@ const LoginPage = () => {
       const decodedToken: any = jwtDecode(accessToken);
 
       const userRole = decodedToken["role"];
-      if (userRole === "Quản trị viên") {
+      if (userRole === "ADMIN") {
         navigate(path.courseManagement);
       }
       setLoading(false);

@@ -27,20 +27,26 @@ export function getAccountColumns(
       ),
       size: 50,
     },
-    { id: "name", header: "Tên", accessorKey: "Name", size: 220 },
-    { id: "email", header: "Email", accessorKey: "Email", size: 260 },
-    { id: "phone", header: "Điện thoại", accessorKey: "Phone", size: 160 },
     {
-      id: "avatar",
-      header: "Avatar",
-      cell: ({ row }: { row: Row<AccountListResponse> }) => (
-        <img
-          src={row.original.Avatar_url}
-          alt={row.original.Name}
-          className="h-10 w-10 rounded-full object-cover"
-        />
-      ),
-      size: 80,
+      id: "name",
+      header: "Tên",
+      accessorKey: "Name",
+      size: 220,
+      enableSorting: false,
+    },
+    {
+      id: "email",
+      header: "Email",
+      accessorKey: "Email",
+      size: 260,
+      enableSorting: false,
+    },
+    {
+      id: "phone",
+      header: "Điện thoại",
+      accessorKey: "Phone",
+      size: 160,
+      enableSorting: false,
     },
     {
       id: "status",

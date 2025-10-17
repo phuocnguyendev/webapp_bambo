@@ -1,6 +1,7 @@
-import { cn } from '@/lib/utils';
-import React from 'react';
-import MaskIcon, { MaskIconName } from './mask-icon';
+import { cn } from "@/lib/utils";
+import React from "react";
+import MaskIcon from "./mask-icon";
+import type { MaskIconName } from "./mask-icon";
 
 interface PageTitleProps {
   icon: MaskIconName;
@@ -17,15 +18,18 @@ export const PageTitle: React.FC<PageTitleProps> = ({
   title,
   actions,
   children,
-  id = 'pageTitle',
+  id = "pageTitle",
 }) => {
   return (
-    <div className={cn('flex flex-col w-full gap-3 p-6 bg-white', className)} id={id}>
+    <div
+      className={cn("flex flex-col w-full gap-3 p-6 bg-white", className)}
+      id={id}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <div className="relative mr-4 text-accent bg-accent bg-opacity-90 h-16 w-16 rounded-full">
+          <div className="relative mr-4 text-white bg-green-700 h-16 w-16 rounded-full">
             <div className="absolute inset-0 flex items-center justify-center">
-              <MaskIcon name={icon} size={28} color="bg-brand-primary" />
+              <MaskIcon name={icon} size={28} color="bg-white" />
             </div>
           </div>
           <h1 className="text-xl font-normal">{title}</h1>

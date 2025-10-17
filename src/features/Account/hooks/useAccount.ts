@@ -71,3 +71,17 @@ export const useDeleteAccount = () => {
     ...mutation,
   };
 };
+
+export const useGetOptionRole = () => {
+  const queryData = useQuery({
+    queryKey: ["roleOptions"],
+    queryFn: async () => {
+      const resp = await accountApis.GetOptionRole();
+      return resp.data.Item;
+    },
+  });
+
+  return {
+    ...queryData,
+  };
+};

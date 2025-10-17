@@ -7,95 +7,86 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Select } from "@/components/ui/select";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCreateAccount, useUpdateAccount } from "../hooks/useAccount";
-import { AccountSchema } from "../rules/validationSchema";
+import {
+  useCreateAccount,
+  useGetOptionRole,
+  useUpdateAccount,
+} from "../hooks/useAccount";
+import {
+  AccountCreateSchema,
+  AccountUpdateSchema,
+} from "../rules/validationSchema";
+import Title from "@/components/ui/title";
+import { cn } from "@/lib/utils";
+import RenderField from "../../../components/RenderField";
 
 type Props = {
   open: boolean;
-  defaultValues?: Partial<AccountUpdate>;
+  data?: Partial<AccountUpdate>;
   onOpenChange: (open: boolean) => void;
 };
 
-type FormValues = z.infer<typeof AccountSchema>;
-
+const defaultValues = {
+  Name: "",
+  Email: "",
+  Phone: "",
+  Avatar_url: "",
+  Status: true,
+  RoleId: "",
+};
 export default function CreateUpdateAccountModal({
   open,
-  defaultValues,
+  data,
   onOpenChange,
 }: Props) {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(AccountSchema),
-    defaultValues: {
-      Name: "",
-      Email: "",
-      Phone: "",
-      Avatar_url: "",
-      Status: true,
-      RoleId: "",
-    },
+  const isUpdate = !!data?.Id;
+  const form = useForm<z.infer<typeof AccountCreateSchema>>({
+    resolver: zodResolver(isUpdate ? AccountUpdateSchema : AccountCreateSchema),
+    defaultValues,
   });
-  useEffect(() => {
-    const isUpdate = !!defaultValues?.Id;
-    if (open && isUpdate && defaultValues) {
-      form.reset({
-        Name: defaultValues.Name ?? "",
-        Email: defaultValues.Email ?? "",
-        Phone: defaultValues.Phone ?? "",
-        Avatar_url: defaultValues.Avatar_url ?? "",
-        Status: defaultValues.Status ?? true,
-        RoleId: defaultValues.RoleId ?? "",
-      });
-    }
-    if (open && !isUpdate) {
-      form.reset({
-        Name: "",
-        Email: "",
-        Phone: "",
-        Avatar_url: "",
-        Status: true,
-        RoleId: "",
-      });
-    }
-  }, [open, defaultValues, form]);
-
-  const titleText = useMemo(
-    () => (defaultValues?.Id ? "Cập nhật tài khoản" : "Tạo tài khoản"),
-    [defaultValues]
-  );
-
+  const { data: roleOptions } = useGetOptionRole();
   const queryClient = useQueryClient();
   const { mutateAsync: createMutation, isPending: isCreating } =
     useCreateAccount();
   const { mutateAsync: updateMutation, isPending: isUpdating } =
     useUpdateAccount();
 
+  useEffect(() => {
+    if (open && isUpdate && data) {
+      form.reset({
+        Name: data.Name ?? "",
+        Email: data.Email ?? "",
+        Phone: data.Phone ?? "",
+        Avatar_url: data.Avatar_url ?? "",
+        Status: data.Status ?? true,
+        RoleId: data.RoleId ?? "",
+      });
+    }
+    if (open && !isUpdate) {
+      form.reset(defaultValues);
+    }
+  }, [open, data, form]);
+
+  const titleText = useMemo(
+    () => (data?.Id ? "Cập nhật tài khoản" : "Tạo tài khoản"),
+    [data]
+  );
+
   const handleSubmit = form.handleSubmit(async (values) => {
     try {
-      if (!defaultValues?.Id) {
+      if (!data?.Id) {
         await createMutation(values as unknown as Account);
         toast({ title: "Tạo tài khoản thành công" });
       } else {
         await updateMutation({
           ...(values as unknown as Account),
-          Id: defaultValues.Id,
+          Id: data.Id,
         } as AccountUpdate);
         toast({ title: "Cập nhật tài khoản thành công" });
       }
@@ -110,150 +101,90 @@ export default function CreateUpdateAccountModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{titleText}</DialogTitle>
-          <DialogDescription>
-            {defaultValues?.Id
-              ? "Chỉnh sửa thông tin người dùng."
-              : "Nhập thông tin để tạo mới người dùng."}
-          </DialogDescription>
+          <Title title={titleText} />
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="Name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Họ và tên</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nguyễn Văn A" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="Email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="user@example.com"
-                        autoComplete="email"
-                        {...field}
-                        disabled={!!defaultValues?.Id}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="Phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Điện thoại</FormLabel>
-                    <FormControl>
-                      <Input placeholder="090..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="RoleId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vai trò</FormLabel>
-                    <FormControl>
-                      <Select
-                      // value={
-                      //   roles.find((r) => r.id === field.value)
-                      //     ? {
-                      //         value: field.value,
-                      //         label: roles.find((r) => r.id === field.value)!
-                      //           .label,
-                      //       }
-                      //     : null
-                      // }
-                      // onChange={(opt: unknown) => {
-                      //   const o = opt as {
-                      //     value: string;
-                      //     label: string;
-                      //   } | null;
-                      //   field.onChange(o ? o.value : "");
-                      // }}
-                      // options={roles.map((r) => ({
-                      //   value: r.id,
-                      //   label: r.label,
-                      // }))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="Avatar_url"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Avatar URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex items-end">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full overflow-hidden border">
-                    {avatar ? (
-                      <img
-                        src={avatar}
-                        alt="avatar preview"
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-full w-full grid place-items-center text-xs text-muted-foreground">
-                        N/A
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
+              <div className="space-y-3">
+                <div
+                  className={cn(
+                    "relative rounded-md overflow-hidden transition-all duration-300",
+                    avatar ? "h-48 border-none" : "h-32 border-2 border-dashed"
+                  )}
+                >
+                  {avatar ? (
+                    <img
+                      src={avatar}
+                      alt="avatar"
+                      className="absolute inset-0 h-full w-full object-cover rounded-md"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-center">
+                      <div className="h-12 w-12 rounded-full grid place-items-center border">
+                        <span className="text-xl">+</span>
                       </div>
-                    )}
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="Status"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center gap-3">
-                        <FormLabel className="m-0">Kích hoạt</FormLabel>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                      <div className="text-xs text-muted-foreground">
+                        Chọn ảnh đại diện
+                      </div>
+                    </div>
+                  )}
                 </div>
+                <RenderField
+                  control={form.control}
+                  name="Avatar_url"
+                  label="Ảnh đại diện"
+                  placeholder="Dán URL ảnh đại diện"
+                  type="text"
+                />
+              </div>
+              <div className="space-y-4">
+                <RenderField
+                  control={form.control}
+                  name="Name"
+                  label={"Họ và tên"}
+                  placeholder="Nhập họ và tên"
+                  type="text"
+                />
+                <RenderField
+                  control={form.control}
+                  name="Phone"
+                  label="Số điện thoại"
+                  placeholder="Nhập số điện thoại"
+                  type="text"
+                />
+                <RenderField
+                  control={form.control}
+                  name="Email"
+                  label="Địa chỉ email"
+                  placeholder="Nhập địa chỉ email"
+                  type="email"
+                  disabled={!!data?.Id}
+                />
+                {!data?.Id && (
+                  <RenderField
+                    control={form.control}
+                    name="Password"
+                    label="Mật khẩu"
+                    placeholder="Nhập mật khẩu"
+                    type="password"
+                  />
+                )}
+                <RenderField
+                  control={form.control}
+                  name="RoleId"
+                  label="Vai trò"
+                  options={roleOptions}
+                />
+                <RenderField
+                  control={form.control}
+                  name="Status"
+                  label="Trạng thái"
+                  isSwitch
+                />
               </div>
             </div>
 
@@ -263,16 +194,21 @@ export default function CreateUpdateAccountModal({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
-                Hủy
+                Đóng
+              </Button>
+              <Button
+                type="submit"
+                variant="secondary"
+                disabled={isCreating || isUpdating}
+              >
+                Lưu & Thêm mới
               </Button>
               <Button type="submit" disabled={isCreating || isUpdating}>
                 {isCreating || isUpdating
-                  ? defaultValues?.Id
+                  ? data?.Id
                     ? "Đang lưu…"
                     : "Đang tạo…"
-                  : defaultValues?.Id
-                  ? "Lưu thay đổi"
-                  : "Tạo mới"}
+                  : "Lưu"}
               </Button>
             </DialogFooter>
           </form>

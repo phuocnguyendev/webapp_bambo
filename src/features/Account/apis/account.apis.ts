@@ -3,6 +3,7 @@ import { serialize } from "@/utils/utils";
 import { isNull, omitBy } from "lodash";
 
 const endPoint = `api/v1/User`;
+const endPointRole = `api/v1/Role`;
 
 const accountApis = {
   GetAll: (param: SearchAccountParams) => {
@@ -29,6 +30,11 @@ const accountApis = {
   Delete: (id: string) => {
     return HttpService.DELETE<ResponseApi<Account>>(
       `/${endPoint}/Delete/${id}`
+    );
+  },
+  GetOptionRole: () => {
+    return HttpService.GET<ResponseApi<Option[]>>(
+      `/${endPointRole}/GetOptions`
     );
   },
 };

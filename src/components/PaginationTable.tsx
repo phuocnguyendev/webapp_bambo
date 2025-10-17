@@ -121,7 +121,12 @@ const PaginationTable = <T,>({
   return (
     <div className="flex flex-col space-y-4 w-full">
       <Table className={tableClassName} id={id}>
-        <TableHeader className={tableHeaderClassName}>
+        <TableHeader
+          className={cn(
+            "bg-green-700 text-white rounded-t-lg",
+            tableHeaderClassName
+          )}
+        >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
               {headerGroup.headers.map((header) => {
