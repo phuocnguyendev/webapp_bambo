@@ -8,6 +8,7 @@ import App from "./App";
 import { AuthProvider } from "./features/Auth/context/auth.context";
 import "./index.css";
 import { lightTheme } from "./utils/theme";
+import { ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </QueryClientProvider>
+      <ToastContainer autoClose={2000} />
     </HelmetProvider>
   </React.StrictMode>
 );

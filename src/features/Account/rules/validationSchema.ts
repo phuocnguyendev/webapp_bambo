@@ -13,9 +13,10 @@ export const AccountCreateSchema = z.object({
 
   Phone: z
     .string()
-    .nonempty({ message: "Số điện thoại không được để trống" })
-    .min(8, { message: "Số điện thoại tối thiểu 8 ký tự" })
-    .max(20, { message: "Số điện thoại quá dài" }),
+    .regex(/^0\d{9,10}$/, "Số điện thoại không hợp lệ")
+    .min(10, "Số điện thoại không hợp lệ")
+    .max(11, "Số điện thoại không hợp lệ")
+    .nonempty("Số điện thoại không được để trống"),
 
   Avatar_url: z
     .string()
@@ -30,7 +31,7 @@ export const AccountCreateSchema = z.object({
     ),
 
   Status: z.boolean(),
-
+  Password: z.string().optional(),
   RoleId: z.string().nonempty({ message: "Vui lòng chọn vai trò" }),
 });
 

@@ -13,17 +13,18 @@ import {
 } from "../hooks/useAccount";
 import useQueryConfig from "../hooks/useQueryConfig";
 import { Button } from "@/components/ui/button";
+import ModalDelete from "../../../components/ModalDelete";
 
 export default function AccountList() {
   const { data, isLoading, isError } = useAccountList();
   const queryClient = useQueryClient();
+  const [modalOpen, setModalOpen] = useState<"account" | "delete" | null>(null);
 
-  const [modalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const { data: detailData } = useGetDetailAccount(selectedId ?? "");
 
-  const deleteMutation = useDeleteAccount();
+  const { mutateAsync: deleteMutation } = useDeleteAccount();
 
   if (isError) return <ErrorFallback />;
   const pageModel = data ?? { ListModel: [], Count: 0 };
@@ -35,24 +36,46 @@ export default function AccountList() {
 
   const handleEdit = (item: AccountListResponse) => {
     setSelectedId(item.Id);
-    setModalOpen(true);
+    setModalOpen("account");
   };
 
   const handleCreate = () => {
     setSelectedId(null);
-    setModalOpen(true);
+    setModalOpen("account");
   };
 
-  const handleDelete = async (item: any) => {
-    if (!window.confirm("Bạn có chắc muốn xóa tài khoản này không?")) return;
-    deleteMutation.mutate(item.Id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["accountList"] });
-      },
-    });
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const handleDelete = (item: AccountListResponse) => {
+    setSelectedId(item.Id);
+    setModalOpen("delete");
   };
 
-  const columns = (getAccountColumns as any)(currentPage, pageSize, {
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+    setLoadingDelete(true);
+    try {
+      await deleteMutation(selectedId);
+      queryClient.setQueryData(
+        ["accountList", queryParams],
+        (oldData?: PageModelResponse<AccountListResponse>) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            ListModel: oldData.ListModel.filter(
+              (item) => item.Id !== selectedId
+            ),
+            Count: oldData.Count > 0 ? oldData.Count - 1 : 0,
+          };
+        }
+      );
+      setModalOpen(null);
+      setSelectedId(null);
+    } finally {
+      setLoadingDelete(false);
+    }
+  };
+
+  const columns = getAccountColumns(currentPage, pageSize, {
     onEdit: handleEdit,
     onDelete: handleDelete,
   });
@@ -85,12 +108,24 @@ export default function AccountList() {
       />
 
       <CreateUpdateAccountModal
-        open={modalOpen}
+        open={modalOpen === "account"}
         data={detailData}
         onOpenChange={(open) => {
-          setModalOpen(open);
+          setModalOpen(open ? "account" : null);
           if (!open) setSelectedId(null);
         }}
+      />
+      <ModalDelete
+        open={modalOpen === "delete"}
+        onOpenChange={(open) => {
+          if (!open) {
+            setModalOpen(null);
+            setSelectedId(null);
+          }
+        }}
+        onOk={handleConfirmDelete}
+        loading={loadingDelete}
+        title="Bạn có chắc chắn muốn xóa tài khoản này?"
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import type { ColumnDefCustom } from "@/components/PaginationTable";
 import type { Row } from "@tanstack/react-table";
-import { Eye, Edit, Trash, EllipsisVertical } from "lucide-react";
+import { Edit, EllipsisVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -65,21 +65,16 @@ export function getAccountColumns(
       cell: ({ row }: { row: Row<AccountListResponse> }) => {
         const item = row.original;
 
-        const handleEdit = () =>
-          handlers?.onEdit ? handlers.onEdit(item) : console.log("Edit", item);
-        const handleDelete = () =>
-          handlers?.onDelete
-            ? handlers.onDelete(item)
-            : console.log("Delete", item);
+        const handleEdit = () => handlers?.onEdit?.(item);
+        const handleDelete = () => handlers?.onDelete?.(item);
 
         return (
-          <div className="flex items-center gap-2 relative">
+          <div className="flex items-center relative">
             <TooltipSimple title="Cập nhật">
               <Button
-                variant="outline"
+                variant="custom"
                 size="icon"
                 onClick={handleEdit}
-                className="h-9 w-9 p-0 rounded-md border border-input bg-background hover:bg-muted hover:text-foreground"
                 icon={<Edit size={16} />}
               />
             </TooltipSimple>
@@ -88,10 +83,9 @@ export function getAccountColumns(
                 <TooltipSimple title="Tùy chọn">
                   <DropdownMenuTrigger asChild>
                     <Button
-                      variant="ghost"
+                      variant="custom"
                       size="icon"
                       aria-label="Tùy chọn"
-                      className="h-9 w-9 p-0 rounded-md border border-input bg-background hover:bg-muted"
                       icon={<EllipsisVertical size={18} />}
                     />
                   </DropdownMenuTrigger>
@@ -102,8 +96,9 @@ export function getAccountColumns(
                     onClick={() => {
                       handleDelete();
                     }}
+                    className="text-red-600"
                   >
-                    <Trash size={14} />
+                    <Trash2 size={14} />
                     <span className="ml-2">Xóa</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

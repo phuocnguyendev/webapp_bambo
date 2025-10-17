@@ -19,12 +19,15 @@ const buttonVariants = cva(
         ghost: "hover:bg-muted hover:text-foreground rounded-lg",
         muted: "bg-muted font-bold hover:bg-muted/90 rounded-lg",
         link: "text-primary underline-offset-4 hover:underline",
+        custom:
+          "p-0 m-0 bg-transparent border-none shadow-none rounded-none text-inherit hover:bg-transparent hover:text-inherit",
       },
       size: {
-        default: "h-10 rounded-lg px-4 py-2",
-        sm: "h-9 rounded-lg px-3",
-        lg: "h-11 rounded-lg px-8",
-        icon: "h-10 w-10 rounded-lg",
+        default: "h-[40px] rounded-lg px-4 py-2",
+        sm: "h-[36px] rounded-lg px-3",
+        lg: "h-[44px] rounded-lg px-8",
+        icon: "h-[40px] w-[40px] rounded-lg",
+        custom: "h-auto w-auto p-0 m-0",
       },
     },
     defaultVariants: {
@@ -47,6 +50,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
+    if (variant === "custom") {
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          type="button"
+          {...props}
+        >
+          {icon ? (
+            <span className="inline-flex items-center">{icon}</span>
+          ) : null}
+        </Comp>
+      );
+    }
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}

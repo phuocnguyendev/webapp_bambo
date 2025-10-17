@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useCreateAccount,
@@ -25,6 +24,7 @@ import {
 import Title from "@/components/ui/title";
 import { cn } from "@/lib/utils";
 import RenderField from "../../../components/RenderField";
+import { toast } from "react-toastify";
 
 type Props = {
   open: boolean;
@@ -37,6 +37,7 @@ const defaultValues = {
   Email: "",
   Phone: "",
   Avatar_url: "",
+  Password: "",
   Status: true,
   RoleId: "",
 };
@@ -81,19 +82,19 @@ export default function CreateUpdateAccountModal({
   const handleSubmit = form.handleSubmit(async (values) => {
     try {
       if (!data?.Id) {
-        await createMutation(values as unknown as Account);
-        toast({ title: "Tạo tài khoản thành công" });
+        await createMutation(values as Account);
+        toast.success("Tạo tài khoản thành công");
       } else {
         await updateMutation({
-          ...(values as unknown as Account),
+          ...values,
           Id: data.Id,
         } as AccountUpdate);
-        toast({ title: "Cập nhật tài khoản thành công" });
+        toast.success("Cập nhật tài khoản thành công");
       }
       queryClient.invalidateQueries({ queryKey: ["accountList"] });
       onOpenChange(false);
     } catch (err) {
-      toast({ title: "Có lỗi xảy ra", description: String(err) });
+      toast.error("Có lỗi xảy ra");
     }
   });
 
@@ -101,7 +102,7 @@ export default function CreateUpdateAccountModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl transition-all duration-300 ease-in-out opacity-0 scale-95 data-[state=open]:opacity-100 data-[state=open]:scale-100">
         <DialogHeader>
           <Title title={titleText} />
         </DialogHeader>
@@ -196,19 +197,13 @@ export default function CreateUpdateAccountModal({
               >
                 Đóng
               </Button>
-              <Button
-                type="submit"
-                variant="secondary"
-                disabled={isCreating || isUpdating}
-              >
-                Lưu & Thêm mới
-              </Button>
+              {data?.Id ? null : (
+                <Button type="submit" variant="secondary" disabled={isCreating}>
+                  Lưu & Thêm mới
+                </Button>
+              )}
               <Button type="submit" disabled={isCreating || isUpdating}>
-                {isCreating || isUpdating
-                  ? data?.Id
-                    ? "Đang lưu…"
-                    : "Đang tạo…"
-                  : "Lưu"}
+                {isCreating || isUpdating ? "Đang lưu…" : "Lưu"}
               </Button>
             </DialogFooter>
           </form>

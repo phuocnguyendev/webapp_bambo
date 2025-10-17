@@ -5,6 +5,7 @@ type Account = {
   Status: boolean;
   Phone: string;
   RoleId: string;
+  Password: string;
 };
 
 type AccountListResponse = Omit<Account, "RoleId"> & {
