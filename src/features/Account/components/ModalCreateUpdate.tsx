@@ -93,8 +93,39 @@ export default function CreateUpdateAccountModal({
       }
       queryClient.invalidateQueries({ queryKey: ["accountList"] });
       onOpenChange(false);
-    } catch (err) {
-      toast.error("Có lỗi xảy ra");
+    } catch (err: any) {
+      if (
+        err?.response?.status === 409 &&
+        err?.response?.data?.message?.includes("Email")
+      ) {
+        form.setError("Email", {
+          type: "manual",
+          message: "Email đã tồn tại!",
+        });
+      } else {
+        toast.error("Có lỗi xảy ra");
+      }
+    }
+  });
+
+  const handleSubmitAndReset = form.handleSubmit(async (values) => {
+    try {
+      await createMutation(values as Account);
+      toast.success("Tạo tài khoản thành công");
+      queryClient.invalidateQueries({ queryKey: ["accountList"] });
+      form.reset(defaultValues);
+    } catch (err: any) {
+      if (
+        err?.response?.status === 409 &&
+        err?.response?.data?.message?.includes("Email")
+      ) {
+        form.setError("Email", {
+          type: "manual",
+          message: "Email đã tồn tại!",
+        });
+      } else {
+        toast.error("Có lỗi xảy ra");
+      }
     }
   });
 
@@ -198,7 +229,12 @@ export default function CreateUpdateAccountModal({
                 Đóng
               </Button>
               {data?.Id ? null : (
-                <Button type="submit" variant="secondary" disabled={isCreating}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={isCreating}
+                  onClick={handleSubmitAndReset}
+                >
                   Lưu & Thêm mới
                 </Button>
               )}
