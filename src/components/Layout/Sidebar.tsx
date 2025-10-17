@@ -70,7 +70,7 @@ function SidebarMenuItem({
             <span className="text-sm drop-shadow-sm">{item.label}</span>
             {item.children && (
               <span className="ml-auto text-xs text-gray-500">
-                {open ? <ChevronUp /> : <ChevronDown />}
+                {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </span>
             )}
           </>
@@ -106,7 +106,7 @@ export default function Sidebar({ isCollapsed = false }: Props) {
           src="/contents/logo.png"
           alt="Logo"
           className={cn(
-            "object-contain rounded-lg shadow transition-all duration-300",
+            "object-cover rounded-lg shadow transition-all duration-300",
             isCollapsed ? "w-10 h-10" : "w-20 h-20"
           )}
         />

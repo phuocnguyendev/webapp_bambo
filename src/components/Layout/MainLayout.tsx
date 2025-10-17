@@ -36,9 +36,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           title={isSidebarCollapsed ? "Mở sidebar" : "Thu nhỏ sidebar"}
         >
           {isSidebarCollapsed ? (
-            <ChevronRight className="h-3 w-3" />
+            <ChevronRight size={15} />
           ) : (
-            <ChevronLeft className="h-3 w-3" />
+            <ChevronLeft size={15} />
           )}
         </Button>
       </aside>

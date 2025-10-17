@@ -1,5 +1,5 @@
 export const path = {
-  login: "/login",
-  courseManagement: "/course",
-  courseDetail: "/course/:id",
+  login: "/DangNhap",
+  courseManagement: "/KhoaHoc",
+  courseDetail: "/KhoaHoc/:id",
 };
