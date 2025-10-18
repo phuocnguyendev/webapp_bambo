@@ -24,7 +24,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <aside
         className={cn(
           "sidebar-container hidden md:block transition-all duration-300 relative",
-          isSidebarCollapsed ? "w-20" : "w-70"
+          isSidebarCollapsed ? "w-20" : "w-71"
         )}
       >
         <Sidebar isCollapsed={isSidebarCollapsed} />
