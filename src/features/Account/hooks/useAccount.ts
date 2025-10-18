@@ -72,13 +72,14 @@ export const useDeleteAccount = () => {
   };
 };
 
-export const useGetOptionRole = () => {
+export const useGetOptionRole = (enabled: boolean) => {
   const queryData = useQuery({
     queryKey: ["roleOptions"],
     queryFn: async () => {
       const resp = await accountApis.GetOptionRole();
       return resp.data.Item;
     },
+    enabled,
   });
 
   return {

@@ -82,7 +82,7 @@ export default function AccountList() {
   });
   return (
     <div className="px-4">
-      <div className="flex items-center justify-between pb-2">
+      <div className="flex items-center justify-between">
         <Title title="Quản lý tài khoản" />
       </div>
       <SearchForm />

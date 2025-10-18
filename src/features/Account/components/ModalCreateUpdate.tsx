@@ -51,7 +51,7 @@ export default function CreateUpdateAccountModal({
     resolver: zodResolver(isUpdate ? AccountUpdateSchema : AccountCreateSchema),
     defaultValues,
   });
-  const { data: roleOptions } = useGetOptionRole();
+  const { data: roleOptions } = useGetOptionRole(open);
   const queryClient = useQueryClient();
   const { mutateAsync: createMutation, isPending: isCreating } =
     useCreateAccount();

@@ -45,7 +45,7 @@ const SearchForm = ({ onRefresh }: { onRefresh?: () => void }) => {
   return (
     <Form {...methods}>
       <form
-        className="my-3 grid grid-cols-12 flex-wrap gap-3 bg-white/80 border border-primary-200 rounded-xl shadow-sm px-4 py-4"
+        className="my-3 grid grid-cols-12 flex-wrap gap-2 bg-white/80 border border-primary-200 rounded-xl shadow-sm px-4 py-4"
         onSubmit={onSubmit}
       >
         <RenderField
