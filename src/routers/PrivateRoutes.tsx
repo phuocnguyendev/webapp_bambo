@@ -1,13 +1,11 @@
 import ErrorFallback from "@/components/ErrorFallback";
 import MainLayout from "@/components/Layout/MainLayout";
 import FullPageLoading from "@/components/ui/FullPageLoading";
-import { Spin } from "@/components/ui/spin";
 import { path } from "@/constants/path";
 import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
 import { lazy, Suspense, type JSX } from "react";
 import { Navigate, Outlet, type RouteObject } from "react-router-dom";
 
-const CourseRoutes = lazy(() => import("@/features/Course/routes"));
 const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -33,11 +31,6 @@ const PrivateRoutes: RouteObject[] = [
     element: <PrivateLayout />,
     errorElement: <ErrorFallback />,
     children: [
-      {
-        path: "course/*",
-        element: <CourseRoutes />,
-        errorElement: <ErrorFallback />,
-      },
       {
         path: "QuanLyTaiKhoan/*",
         element: <AccountRoutes />,
