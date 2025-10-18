@@ -48,7 +48,7 @@ const LoginPage = () => {
 
       const userRole = decodedToken["role"];
       if (userRole === "ADMIN") {
-        navigate(path.courseManagement);
+        navigate(path.QuanLyTaiKhoan);
       }
       setLoading(false);
     });

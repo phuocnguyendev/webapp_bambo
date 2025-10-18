@@ -1,17 +1,16 @@
 import TopNavbar from "./TopNavbar";
-import { Link } from "react-router-dom";
 
 const Logo = () => (
-  <Link to="/" className="flex items-center gap-2">
+  <div className="flex items-center gap-2">
     <img
       src={"/contents/logo.png"}
       alt="Logo"
       className="h-10 w-10 object-contain rounded-full shadow"
     />
-    <span className="hidden md:inline font-bold text-xl text-green-700 tracking-tight drop-shadow-sm">
+    <span className="hidden md:inline font-bold text-xl text-green-700 tracking-tight drop-shadow-sm decoration-none hover:decoration-none">
       Bamboo Warehouse
     </span>
-  </Link>
+  </div>
 );
 
 export default function TopBar() {

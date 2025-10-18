@@ -6,3 +6,8 @@ export const serialize = (obj: any) => {
     }
   return str.join("&");
 };
+
+export const handleTrimSpaces = (value?: string) => {
+  if (!value) return "";
+  return value.trim().replace(/\s+/g, " ");
+};

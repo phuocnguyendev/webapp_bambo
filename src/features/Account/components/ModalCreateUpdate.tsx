@@ -152,7 +152,7 @@ export default function CreateUpdateAccountModal({
                     <img
                       src={avatar}
                       alt="avatar"
-                      className="absolute inset-0 h-full w-full object-cover rounded-md"
+                      className="absolute inset-0 h-full w-full rounded-md"
                     />
                   ) : (
                     <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-center">

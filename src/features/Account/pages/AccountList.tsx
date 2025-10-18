@@ -14,6 +14,7 @@ import {
 import useQueryConfig from "../hooks/useQueryConfig";
 import { Button } from "@/components/ui/button";
 import ModalDelete from "../../../components/ModalDelete";
+import SearchForm from "../components/SearchForm";
 
 export default function AccountList() {
   const { data, isLoading, isError } = useAccountList();
@@ -84,6 +85,7 @@ export default function AccountList() {
       <div className="flex items-center justify-between pb-2">
         <Title title="Quản lý tài khoản" />
       </div>
+      <SearchForm />
       <div className="mb-2">
         <Button
           variant="default"

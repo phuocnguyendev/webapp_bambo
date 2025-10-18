@@ -20,7 +20,7 @@ export function getAccountColumns(
 ): ColumnDefCustom<AccountListResponse>[] {
   return [
     {
-      id: "stt",
+      id: "Stt",
       header: "STT",
       cell: ({ row }: { row: Row<AccountListResponse> }) => (
         <div>{(currentPage - 1) * pageSize + row.index + 1}</div>
@@ -28,28 +28,28 @@ export function getAccountColumns(
       size: 50,
     },
     {
-      id: "name",
-      header: "Tên",
+      id: "Name",
+      header: "Tên nhân viên",
       accessorKey: "Name",
       size: 220,
       enableSorting: false,
     },
     {
-      id: "email",
+      id: "Email",
       header: "Email",
       accessorKey: "Email",
       size: 260,
       enableSorting: false,
     },
     {
-      id: "phone",
+      id: "Phone",
       header: "Điện thoại",
       accessorKey: "Phone",
       size: 160,
       enableSorting: false,
     },
     {
-      id: "status",
+      id: "Status",
       header: "Trạng thái",
       cell: ({ row }: { row: Row<AccountListResponse> }) =>
         row.original.Status ? (
@@ -60,7 +60,7 @@ export function getAccountColumns(
       size: 120,
     },
     {
-      id: "actions",
+      id: "Actions",
       header: "Hành động",
       cell: ({ row }: { row: Row<AccountListResponse> }) => {
         const item = row.original;

@@ -1,5 +1,5 @@
 import { path } from "@/constants/path";
-import {
+import React, {
   createContext,
   useCallback,
   useEffect,
@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { clearTokens, getUserIdFromToken } from "../utils/utils";
+import { useGetDetailAccount } from "@/features/Account/hooks/useAccount";
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -14,40 +15,68 @@ export interface AuthContextType {
   isLoading?: boolean;
   isAuthChecked: boolean;
   logout: () => void;
+  user: Account | null | undefined;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
+
+/** Safe localStorage helpers (tránh lỗi khi SSR) */
+const ls = {
+  get: (key: string) =>
+    typeof window !== "undefined" ? window.localStorage.getItem(key) : null,
+  set: (key: string, value: string) =>
+    typeof window !== "undefined"
+      ? window.localStorage.setItem(key, value)
+      : undefined,
+  remove: (key: string) =>
+    typeof window !== "undefined"
+      ? window.localStorage.removeItem(key)
+      : undefined,
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const token = localStorage.getItem("accessToken");
-    const extractedUserId = token ? getUserIdFromToken(token) : null;
-    console.log("Auth init - token:", !!token, "userId:", !!extractedUserId);
-    return !!extractedUserId;
-  });
-  const isAuthChecked = true;
+  const initToken = ls.get("accessToken");
+  const initUserId = initToken ? getUserIdFromToken(initToken) : null;
+
+  const [userId, setUserId] = useState<string | null>(initUserId!);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!initUserId);
+  const [isAuthChecked, setIsAuthChecked] = useState<boolean>(false);
+
+  const { data: user, isLoading } = useGetDetailAccount(userId ?? "");
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    const extractedUserId = token ? getUserIdFromToken(token) : null;
-    console.log("Auth effect - token:", !!token, "userId:", !!extractedUserId);
-    setIsAuthenticated(!!extractedUserId);
+    setIsAuthChecked(true);
   }, []);
 
-  const loginAccount = useCallback((responseData: RefreshTokenResponse) => {
-    const { accessToken, refreshToken } = responseData;
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "accessToken") {
+        const token = ls.get("accessToken");
+        const uid = token ? getUserIdFromToken(token) : null;
+        setUserId(uid ?? null);
+        setIsAuthenticated(!!uid);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
-    const userIdFromToken = getUserIdFromToken(accessToken);
-    if (userIdFromToken) {
-      setIsAuthenticated(true);
-    }
+  const saveToken = useCallback((responseData: RefreshTokenResponse) => {
+    const { accessToken, refreshToken } = responseData;
+
+    ls.set("accessToken", accessToken);
+    ls.set("refreshToken", refreshToken);
+
+    const uid = getUserIdFromToken(accessToken);
+    setUserId(uid ?? null);
+    setIsAuthenticated(!!uid);
   }, []);
 
   const logout = useCallback(() => {
     clearTokens();
+    setUserId(null);
     setIsAuthenticated(false);
     window.location.replace(path.login);
   }, []);
@@ -55,11 +84,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const contextValue = useMemo<AuthContextType>(
     () => ({
       isAuthenticated,
-      saveToken: loginAccount,
+      saveToken,
       isAuthChecked,
       logout,
+      user: user ?? null,
+      isLoading,
     }),
-    [isAuthenticated, loginAccount, isAuthChecked, logout]
+    [isAuthenticated, saveToken, isAuthChecked, logout, user, isLoading]
   );
 
   return (

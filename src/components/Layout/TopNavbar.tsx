@@ -4,28 +4,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { path } from "@/constants/path";
+import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
+import { clearTokens } from "@/features/Auth/utils/utils";
+import { ArrowDown } from "lucide-react";
 
 const UserMenu = () => {
-  const { t } = useTranslation();
-
+  const handleLogout = () => {
+    clearTokens();
+    window.location.replace(path.login);
+  };
+  const { user } = useAuthContext();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="group/user inline-flex h-10 w-max text-sm items-center justify-center ">
-        {"PhuocNguyen"}
-        <ChevronDown className="ml-5 h-3 w-3 transition duration-200 group/user-data-[state=open]:rotate-180" />
+      <DropdownMenuTrigger className="group/user inline-flex h-10 w-max text-sm items-center justify-center text-base">
+        {user?.Name}
+        <ArrowDown className="ml-5 h-3 w-3 transition duration-200 group/user-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <Link to="/">
-          <DropdownMenuItem className="cursor-pointer">
-            {t("entities.profile")}
-          </DropdownMenuItem>
-        </Link>
-
-        <DropdownMenuItem className="cursor-pointer">
-          {t("auth.logout")}
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+          Đăng xuất
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -33,11 +31,24 @@ const UserMenu = () => {
 };
 
 export default function TopNavbar() {
+  const { user } = useAuthContext();
   return (
-    <ul className="flex items-center space-x-5">
-      <li>
-        <UserMenu />
-      </li>
-    </ul>
+    <>
+      <div className="flex items-center gap-2 mr-4">
+        <img
+          src={
+            user?.Avatar_url ||
+            `https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/05/anh-cho-hai-104.jpg`
+          }
+          alt="App logo"
+          className="h-8 w-8 rounded-full object-cover"
+        />
+      </div>
+      <ul className="flex items-center space-x-5">
+        <li>
+          <UserMenu />
+        </li>
+      </ul>
+    </>
   );
 }

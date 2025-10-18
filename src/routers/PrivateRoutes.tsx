@@ -1,5 +1,6 @@
 import ErrorFallback from "@/components/ErrorFallback";
 import MainLayout from "@/components/Layout/MainLayout";
+import FullPageLoading from "@/components/ui/FullPageLoading";
 import { Spin } from "@/components/ui/spin";
 import { path } from "@/constants/path";
 import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
@@ -11,13 +12,7 @@ const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
-  console.log(
-    "ProtectedRoute - isAuthChecked:",
-    isAuthChecked,
-    "isAuthenticated:",
-    isAuthenticated
-  );
-  if (!isAuthChecked) return <Spin />;
+  if (!isAuthChecked) return <FullPageLoading />;
   if (!isAuthenticated) return <Navigate to={path.login} replace />;
   return children;
 };
@@ -25,7 +20,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 const PrivateLayout = () => (
   <ProtectedRoute>
     <MainLayout>
-      <Suspense fallback={<Spin />}>
+      <Suspense fallback={<FullPageLoading />}>
         <Outlet />
       </Suspense>
     </MainLayout>

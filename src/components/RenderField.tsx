@@ -13,12 +13,13 @@ import { Switch } from "@/components/ui/switch";
 interface RenderFieldProps {
   control: any;
   name: string;
-  label: string;
+  label?: string;
   placeholder?: string;
   type?: string;
   options?: Option[];
   isSwitch?: boolean;
   disabled?: boolean;
+  className?: string;
 }
 
 const RenderField: React.FC<RenderFieldProps> = ({
@@ -30,13 +31,14 @@ const RenderField: React.FC<RenderFieldProps> = ({
   options,
   isSwitch = false,
   disabled = false,
+  className,
 }) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <FormItem>
+        <FormItem className={className}>
           {isSwitch ? (
             <div className="flex items-center gap-2">
               <FormLabel className="mb-0">{label}</FormLabel>

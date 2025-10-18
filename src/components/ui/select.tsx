@@ -1,10 +1,47 @@
 import RcSelect from "react-select";
 import RcAsyncSelect from "react-select/async";
 import { useTheme } from "styled-components";
-
+import {
+  Controller,
+  type Control,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import { cn } from "@/lib/utils";
 import React from "react";
 import type { Theme } from "@/utils/theme";
+// SelectController: dùng cho react-hook-form
+type SelectControllerProps<T extends FieldValues> = Omit<
+  SelectProps,
+  "value" | "onChange"
+> & {
+  control: Control<T>;
+  name: Path<T>;
+};
+
+function SelectController<T extends FieldValues>({
+  control,
+  name,
+  ...props
+}: SelectControllerProps<T>) {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <Select
+          {...props}
+          {...field}
+          value={
+            props.options?.find((opt: any) => opt.value === field.value) || null
+          }
+          onChange={(option: any) => field.onChange(option?.value)}
+          hasError={fieldState.invalid}
+        />
+      )}
+    />
+  );
+}
 
 interface SelectProps extends React.ComponentPropsWithoutRef<typeof RcSelect> {
   disabled?: boolean;
@@ -101,5 +138,5 @@ const Select = React.forwardRef<
 
 Select.displayName = "Select component";
 
-export { Select };
+export { Select, SelectController };
 export type { AsyncSelectProps, SelectProps };
