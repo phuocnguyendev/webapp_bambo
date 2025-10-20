@@ -18,7 +18,7 @@ const PublicLayoutWrapper = () => (
 
 const PublicRoutes: RouteObject[] = [
   {
-    path: path.login,
+    path: path.Login,
     element: <PublicLayoutWrapper />,
     errorElement: <ErrorFallback />,
     children: [

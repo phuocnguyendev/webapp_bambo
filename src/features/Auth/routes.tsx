@@ -5,13 +5,14 @@ import { Route, Routes } from "react-router-dom";
 
 const LoginPage = lazy(() => import("../Auth/pages/LoginPage"));
 
-export default function AuthRoutes() {
+const AuthRoutes = () => {
   return (
     <Suspense fallback={<Spin />}>
       <Routes>
-        <Route path={path.login} element={<LoginPage />} />
+        <Route path={path.Login} element={<LoginPage />} />
         <Route path="*" element={<LoginPage />} />
       </Routes>
     </Suspense>
   );
-}
+};
+export default AuthRoutes;

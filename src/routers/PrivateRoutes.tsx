@@ -3,6 +3,7 @@ import MainLayout from "@/components/Layout/MainLayout";
 import FullPageLoading from "@/components/ui/FullPageLoading";
 import { path } from "@/constants/path";
 import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
+import PermissionRoutes from "@/features/Permission/routes";
 import { lazy, Suspense, type JSX } from "react";
 import { Navigate, Outlet, type RouteObject } from "react-router-dom";
 
@@ -11,7 +12,7 @@ const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
   if (!isAuthChecked) return <FullPageLoading />;
-  if (!isAuthenticated) return <Navigate to={path.login} replace />;
+  if (!isAuthenticated) return <Navigate to={path.Login} replace />;
   return children;
 };
 
@@ -34,6 +35,11 @@ const PrivateRoutes: RouteObject[] = [
       {
         path: "QuanLyTaiKhoan/*",
         element: <AccountRoutes />,
+        errorElement: <ErrorFallback />,
+      },
+      {
+        path: "NhomQuyen/*",
+        element: <PermissionRoutes />,
         errorElement: <ErrorFallback />,
       },
       {

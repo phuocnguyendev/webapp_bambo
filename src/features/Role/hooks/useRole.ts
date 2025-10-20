@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import accountApis from "../apis/account.apis";
-import useQueryConfig from "./useQueryConfig";
+import roleApis from "../apis/role.apis";
 
-export const useCreateAccount = () => {
+export const useCreateRole = () => {
   const mutation = useMutation({
-    mutationFn: async (data: Account) => {
-      const resp = await accountApis.Create(data);
+    mutationFn: async (data: Role) => {
+      const resp = await roleApis.Create(data);
       return resp.data.Item;
     },
   });
@@ -15,13 +14,11 @@ export const useCreateAccount = () => {
   };
 };
 
-export const useAccountList = () => {
-  const { queryParams } = useQueryConfig();
-
+export const useRoleList = () => {
   const queryData = useQuery({
-    queryKey: ["accountList", queryParams],
+    queryKey: ["roleList"],
     queryFn: async () => {
-      const resp = await accountApis.GetAll({ ...queryParams });
+      const resp = await roleApis.GetAll();
       return resp.data.Item;
     },
   });
@@ -31,10 +28,10 @@ export const useAccountList = () => {
   };
 };
 
-export const useUpdateAccount = () => {
+export const useRoleUpdate = () => {
   const mutation = useMutation({
-    mutationFn: async (data: AccountUpdate) => {
-      const resp = await accountApis.Update(data);
+    mutationFn: async (data: RoleUpdate) => {
+      const resp = await roleApis.Update(data);
       return resp.data.Item;
     },
   });
@@ -44,11 +41,11 @@ export const useUpdateAccount = () => {
   };
 };
 
-export const useGetDetailAccount = (id: string) => {
+export const useGetDetailRole = (id: string) => {
   const queryData = useQuery({
-    queryKey: ["accountDetail", id],
+    queryKey: ["roleDetail", id],
     queryFn: async () => {
-      const resp = await accountApis.GetById(id);
+      const resp = await roleApis.GetById(id);
       return resp.data.Item;
     },
     enabled: !!id,
@@ -59,10 +56,10 @@ export const useGetDetailAccount = (id: string) => {
   };
 };
 
-export const useDeleteAccount = () => {
+export const useDeleteRole = () => {
   const mutation = useMutation({
     mutationFn: async (id: string) => {
-      const resp = await accountApis.Delete(id);
+      const resp = await roleApis.Delete(id);
       return resp.data.Item;
     },
   });
@@ -76,7 +73,7 @@ export const useGetOptionRole = (enabled: boolean) => {
   const queryData = useQuery({
     queryKey: ["roleOptions"],
     queryFn: async () => {
-      const resp = await accountApis.GetOptionRole();
+      const resp = await roleApis.GetOptionRole();
       return resp.data.Item;
     },
     enabled,

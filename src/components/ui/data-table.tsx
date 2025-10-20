@@ -64,9 +64,12 @@ const DataTable = <TData,>({
   showNoDataMessage = true,
   showData = true,
 }: DataTableProps<TData>) => {
+  const normalizedData: TData[] = Array.isArray(data)
+    ? data
+    : (data as any)?.Item ?? [];
   const table = useReactTable({
     columns,
-    data,
+    data: normalizedData,
     getCoreRowModel: getCoreRowModel(),
     enableColumnResizing: false,
     autoResetPageIndex: false,

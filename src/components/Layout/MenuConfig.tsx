@@ -28,7 +28,7 @@ export interface SidebarMenuItem {
 export const MenuConfig: SidebarMenuItem[] = [
   {
     label: "Trang chủ",
-    path: "/",
+    path: path.Home,
     icon: <Home size={20} />,
     helmet: {
       title: "Trang chủ - Bamboo Warehouse",
@@ -37,7 +37,7 @@ export const MenuConfig: SidebarMenuItem[] = [
   },
   {
     label: "Quản lý tài khoản",
-    path: "/QuanLyTaiKhoan",
+    path: path.QuanLyTaiKhoan,
     icon: <User size={20} />,
     helmet: {
       title: "Quản lý tài khoản - Bamboo Warehouse",
@@ -45,17 +45,17 @@ export const MenuConfig: SidebarMenuItem[] = [
     },
   },
   {
-    label: "Phân quyền",
-    path: "/permission",
+    label: "Nhóm quyền",
+    path: path.NhomQuyen,
     icon: <ShieldCheck size={20} />,
     helmet: {
-      title: "Phân quyền - Bamboo Warehouse",
-      description: "Quản lý phân quyền người dùng",
+      title: "Nhóm quyền - Bamboo Warehouse",
+      description: "Quản lý Nhóm quyền người dùng",
     },
   },
   {
     label: "Sản phẩm",
-    path: "/course",
+    path: path.CourseManagement,
     icon: <Package size={20} />,
     helmet: {
       title: "Quản lý sản phẩm - Bamboo Warehouse",
@@ -64,7 +64,7 @@ export const MenuConfig: SidebarMenuItem[] = [
     children: [
       {
         label: "Danh mục sản phẩm",
-        path: path.courseManagement,
+        path: path.CourseManagement,
         helmet: {
           title: "Danh mục sản phẩm - Bamboo Warehouse",
           description: "Quản lý danh mục sản phẩm",

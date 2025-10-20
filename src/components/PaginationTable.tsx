@@ -65,9 +65,8 @@ interface PaginationTableProps<T> {
   pageModel: PageModelResponse<T>;
   isLoading: boolean;
 
-  /** trạng thái phân trang đến từ bên ngoài (URL/query/store) */
-  currentPage: number; // trang hiện tại (bắt đầu từ 1)
-  pageSize: number; // số bản ghi/trang
+  currentPage?: number; // trang hiện tại (bắt đầu từ 1)
+  pageSize?: number; // số bản ghi/trang
 
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
@@ -101,7 +100,7 @@ const PaginationTable = <T,>({
   tableRowClassName,
   id = "paginationTable",
 }: PaginationTableProps<T>) => {
-  const data = pageModel?.ListModel ?? [];
+  const data = pageModel?.ListModel || pageModel || [];
   const total = pageModel?.Count ?? 0;
   const totalPage = Math.max(1, Math.ceil(total / (pageSize || 1)));
 
@@ -241,8 +240,8 @@ const PaginationTable = <T,>({
         }
       >
         <PaginationControl
-          currentPage={currentPage}
-          pageSize={pageSize}
+          currentPage={currentPage!}
+          pageSize={pageSize!}
           total={total}
           totalPage={totalPage}
           onPageChange={onPageChange}

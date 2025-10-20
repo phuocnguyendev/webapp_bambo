@@ -12,11 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  useCreateAccount,
-  useGetOptionRole,
-  useUpdateAccount,
-} from "../hooks/useAccount";
+import { useCreateAccount, useUpdateAccount } from "../hooks/useAccount";
 import {
   AccountCreateSchema,
   AccountUpdateSchema,
@@ -26,6 +22,7 @@ import { cn } from "@/lib/utils";
 import RenderField from "../../../components/RenderField";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
+import { useGetOptionRole } from "@/features/Permission/hooks/usePermission";
 
 type Props = {
   open: boolean;

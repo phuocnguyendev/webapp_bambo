@@ -10,64 +10,42 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TooltipSimple } from "@/components/ui/tooltip";
 
-export function getAccountColumns(
-  currentPage: number,
-  pageSize: number,
-  handlers?: {
-    onEdit?: (item: AccountListResponse) => void;
-    onDelete?: (item: AccountListResponse) => void;
-  }
-): ColumnDefCustom<AccountListResponse>[] {
+const getPermissionColumns = (handlers?: {
+  onEdit?: (item: PermissionUpdate) => void;
+  onDelete?: (item: PermissionUpdate) => void;
+}): ColumnDefCustom<PermissionUpdate>[] => {
   return [
     {
       id: "Stt",
       header: "STT",
-      cell: ({ row }: { row: Row<AccountListResponse> }) => (
-        <div>{(currentPage - 1) * pageSize + row.index + 1}</div>
+      cell: ({ row }: { row: Row<PermissionUpdate> }) => (
+        <div>{row.index + 1}</div>
       ),
       size: 50,
     },
     {
       id: "Name",
-      header: "Tên nhân viên",
+      header: "Tên nhóm quyền",
       accessorKey: "Name",
       size: 220,
       enableSorting: false,
     },
     {
-      id: "Email",
-      header: "Email",
-      accessorKey: "Email",
+      id: "Code",
+      header: "Mã nhóm quyền",
+      accessorKey: "Code",
       size: 260,
       enableSorting: false,
     },
-    {
-      id: "Phone",
-      header: "Điện thoại",
-      accessorKey: "Phone",
-      size: 160,
-      enableSorting: false,
-    },
-    {
-      id: "Status",
-      header: "Trạng thái",
-      cell: ({ row }: { row: Row<AccountListResponse> }) =>
-        row.original.Status ? (
-          <span className="text-green-600 font-medium">Đang hoạt động</span>
-        ) : (
-          <span className="text-red-600 font-medium">Ngừng hoạt động</span>
-        ),
-      size: 120,
-    },
+
     {
       id: "Actions",
       header: "Hành động",
-      cell: ({ row }: { row: Row<AccountListResponse> }) => {
+      cell: ({ row }: { row: Row<PermissionUpdate> }) => {
         const item = row.original;
 
         const handleEdit = () => handlers?.onEdit?.(item);
         const handleDelete = () => handlers?.onDelete?.(item);
-
         return (
           <div className="flex items-center relative">
             <TooltipSimple title="Cập nhật">
@@ -110,6 +88,6 @@ export function getAccountColumns(
       size: 180,
     },
   ];
-}
+};
 
-export default getAccountColumns;
+export default getPermissionColumns;

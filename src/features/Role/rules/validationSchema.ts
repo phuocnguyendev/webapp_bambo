@@ -38,3 +38,8 @@ export const AccountCreateSchema = z.object({
 export const AccountUpdateSchema = AccountCreateSchema.extend({
   Password: z.string().optional(),
 });
+
+export const PermissionSchema = z.object({
+  Name: z.string().nonempty({ message: "Tên không được để trống" }),
+  Code: z.string().nonempty({ message: "Mã không được để trống" }),
+});

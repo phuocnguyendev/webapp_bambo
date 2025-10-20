@@ -7,7 +7,7 @@ const NotFoundHandler = () => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
 
   if (!isAuthChecked) return <ErrorFallback />;
-  if (!isAuthenticated) return <Navigate to={path.login} replace />;
+  if (!isAuthenticated) return <Navigate to={path.Login} replace />;
 
   return <ErrorFallback />;
 };

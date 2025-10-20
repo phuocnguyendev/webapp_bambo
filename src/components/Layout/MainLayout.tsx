@@ -44,7 +44,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </aside>
       <div className="flex-1 flex flex-col min-h-screen transition-all duration-300 bg-white">
         <TopBar />
-        <div className="w-full px-8 ">{!isHome && <Breadcrumbs />}</div>
+        <div className="w-full px-8">{!isHome && <Breadcrumbs />}</div>
         <main className="flex-1 px-4 ">{children}</main>
       </div>
     </div>
