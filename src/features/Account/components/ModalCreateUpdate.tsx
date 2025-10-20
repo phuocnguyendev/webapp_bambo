@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +25,7 @@ import Title from "@/components/ui/title";
 import { cn } from "@/lib/utils";
 import RenderField from "../../../components/RenderField";
 import { toast } from "react-toastify";
+import { Eye, EyeOff } from "lucide-react";
 
 type Props = {
   open: boolean;
@@ -57,6 +58,7 @@ export default function CreateUpdateAccountModal({
     useCreateAccount();
   const { mutateAsync: updateMutation, isPending: isUpdating } =
     useUpdateAccount();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (open && isUpdate && data) {
@@ -197,19 +199,32 @@ export default function CreateUpdateAccountModal({
                   disabled={!!data?.Id}
                 />
                 {!data?.Id && (
-                  <RenderField
-                    control={form.control}
-                    name="Password"
-                    label="Mật khẩu"
-                    placeholder="Nhập mật khẩu"
-                    type="password"
-                  />
+                  <div className="relative">
+                    <RenderField
+                      control={form.control}
+                      name="Password"
+                      label="Mật khẩu"
+                      placeholder="Nhập mật khẩu"
+                      type={showPassword ? "text" : "password"}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute inset-y-0 right-3 flex items-center mt-6"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                 )}
+
                 <RenderField
                   control={form.control}
                   name="RoleId"
                   label="Vai trò"
                   options={roleOptions}
+                  placeholder="Chọn vai trò"
                 />
                 <RenderField
                   control={form.control}
