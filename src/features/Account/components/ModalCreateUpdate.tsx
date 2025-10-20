@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import RenderField from "../../../components/RenderField";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
-import { useGetOptionRole } from "@/features/Permission/hooks/usePermission";
+import { useGetOptionRole } from "@/features/Role/hooks/useRole";
 
 type Props = {
   open: boolean;

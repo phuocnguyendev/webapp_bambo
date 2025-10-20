@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import ModalDelete from "../../../components/ModalDelete";
 import { useDeleteRole, useRoleList } from "../hooks/useRole";
 import { DataTable } from "@/components/ui/data-table";
-import getPermissionColumns from "../config/roleConfig";
+import getRoleColumns from "../config/roleConfig";
 import ModalCreateUpdate from "../components/ModalCreateUpdate";
 export default function RoleList() {
   const { data, isLoading, isError } = useRoleList();
@@ -56,7 +56,7 @@ export default function RoleList() {
     }
   };
 
-  const columns = getPermissionColumns({
+  const columns = getRoleColumns({
     onEdit: handleEdit,
     onDelete: handleDelete,
   });

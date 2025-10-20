@@ -10,17 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TooltipSimple } from "@/components/ui/tooltip";
 
-const getPermissionColumns = (handlers?: {
-  onEdit?: (item: PermissionUpdate) => void;
-  onDelete?: (item: PermissionUpdate) => void;
-}): ColumnDefCustom<PermissionUpdate>[] => {
+const getRoleColumns = (handlers?: {
+  onEdit?: (item: RoleUpdate) => void;
+  onDelete?: (item: RoleUpdate) => void;
+}): ColumnDefCustom<RoleUpdate>[] => {
   return [
     {
       id: "Stt",
       header: "STT",
-      cell: ({ row }: { row: Row<PermissionUpdate> }) => (
-        <div>{row.index + 1}</div>
-      ),
+      cell: ({ row }: { row: Row<RoleUpdate> }) => <div>{row.index + 1}</div>,
       size: 50,
     },
     {
@@ -41,7 +39,7 @@ const getPermissionColumns = (handlers?: {
     {
       id: "Actions",
       header: "Hành động",
-      cell: ({ row }: { row: Row<PermissionUpdate> }) => {
+      cell: ({ row }: { row: Row<RoleUpdate> }) => {
         const item = row.original;
 
         const handleEdit = () => handlers?.onEdit?.(item);
@@ -90,4 +88,4 @@ const getPermissionColumns = (handlers?: {
   ];
 };
 
-export default getPermissionColumns;
+export default getRoleColumns;

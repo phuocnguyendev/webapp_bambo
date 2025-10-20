@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateRole, useRoleUpdate } from "../hooks/useRole";
-import { PermissionSchema } from "../rules/validationSchema";
+import { RoleSchema } from "../rules/validationSchema";
 import Title from "@/components/ui/title";
 import RenderField from "../../../components/RenderField";
 import { toast } from "react-toastify";
@@ -32,8 +32,8 @@ export default function CreateUpdateAccountModal({
   data,
   onOpenChange,
 }: Props) {
-  const form = useForm<z.infer<typeof PermissionSchema>>({
-    resolver: zodResolver(PermissionSchema),
+  const form = useForm<z.infer<typeof RoleSchema>>({
+    resolver: zodResolver(RoleSchema),
     defaultValues,
   });
   const queryClient = useQueryClient();
