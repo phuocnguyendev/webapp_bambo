@@ -1,17 +1,21 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogFooter,
+  DialogHeader,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import Title from "@/components/ui/title";
+import { cn } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import RenderField from "../../../components/RenderField";
 import {
   useCreateAccount,
   useGetOptionRole,
@@ -21,10 +25,6 @@ import {
   AccountCreateSchema,
   AccountUpdateSchema,
 } from "../rules/validationSchema";
-import Title from "@/components/ui/title";
-import { cn } from "@/lib/utils";
-import RenderField from "../../../components/RenderField";
-import { toast } from "react-toastify";
 
 type Props = {
   open: boolean;
@@ -94,13 +94,14 @@ export default function CreateUpdateAccountModal({
       queryClient.invalidateQueries({ queryKey: ["accountList"] });
       onOpenChange(false);
     } catch (err: any) {
+      console.log(err);
       if (
         err?.response?.status === 409 &&
         err?.response?.data?.message?.includes("Email")
       ) {
         form.setError("Email", {
           type: "manual",
-          message: "Email đã tồn tại!",
+          message: err.response.data.message,
         });
       } else {
         toast.error("Có lỗi xảy ra");
@@ -121,7 +122,7 @@ export default function CreateUpdateAccountModal({
       ) {
         form.setError("Email", {
           type: "manual",
-          message: "Email đã tồn tại!",
+          message: err.response.data.message,
         });
       } else {
         toast.error("Có lỗi xảy ra");
