@@ -3,11 +3,11 @@ import MainLayout from "@/components/Layout/MainLayout";
 import FullPageLoading from "@/components/ui/FullPageLoading";
 import { path } from "@/constants/path";
 import { useAuthContext } from "@/features/Auth/hooks/useAuthContext";
-import PermissionRoutes from "@/features/Permission/routes";
 import { lazy, Suspense, type JSX } from "react";
 import { Navigate, Outlet, type RouteObject } from "react-router-dom";
 
 const AccountRoutes = lazy(() => import("@/features/Account/routes"));
+const RoleRoutes = lazy(() => import("@/features/Role/routes"));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
@@ -39,7 +39,7 @@ const PrivateRoutes: RouteObject[] = [
       },
       {
         path: "NhomQuyen/*",
-        element: <PermissionRoutes />,
+        element: <RoleRoutes />,
         errorElement: <ErrorFallback />,
       },
       {
