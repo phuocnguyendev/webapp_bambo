@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     clearTokens();
     setUserId(null);
     setIsAuthenticated(false);
-    window.location.replace(path.login);
+    window.location.replace(path.Login);
   }, []);
 
   const contextValue = useMemo<AuthContextType>(

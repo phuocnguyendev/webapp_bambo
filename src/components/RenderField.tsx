@@ -64,6 +64,7 @@ const RenderField: React.FC<RenderFieldProps> = ({
                     options={options}
                     isClearable
                     hasError={!!fieldState?.error}
+                    placeholder={placeholder}
                   />
                 ) : (
                   <Input

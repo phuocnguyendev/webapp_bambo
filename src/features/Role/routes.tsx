@@ -2,14 +2,15 @@ import { Spin } from "@/components/ui/spin";
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
-const AccountList = lazy(() => import("../Account/pages/AccountList"));
+const RoleList = lazy(() => import("../Role/pages/RoleList"));
 
-export default function AccountRoutes() {
+const RoleRoutes = () => {
   return (
     <Suspense fallback={<Spin />}>
       <Routes>
-        <Route index element={<AccountList />} />
+        <Route index element={<RoleList />} />
       </Routes>
     </Suspense>
   );
-}
+};
+export default RoleRoutes;

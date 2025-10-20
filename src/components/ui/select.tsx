@@ -131,7 +131,6 @@ const Select = React.forwardRef<
       classNamePrefix="react-select"
       styles={mergedStyles}
       classNames={classNames}
-      placeholder="Chọn..."
     />
   );
 });

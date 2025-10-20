@@ -106,7 +106,7 @@ axiosInstance.interceptors.response.use(
     ) {
       clearTokens();
       if (typeof window !== "undefined") {
-        window.location.replace(path.login);
+        window.location.replace(path.Login);
       }
       return Promise.reject(error);
     }
@@ -140,7 +140,7 @@ axiosInstance.interceptors.response.use(
               reject(err);
               clearTokens();
               if (typeof window !== "undefined") {
-                window.location.replace(path.login);
+                window.location.replace(path.Login);
               }
             }
           }

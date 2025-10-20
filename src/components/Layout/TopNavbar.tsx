@@ -12,7 +12,7 @@ import { ArrowDown } from "lucide-react";
 const UserMenu = () => {
   const handleLogout = () => {
     clearTokens();
-    window.location.replace(path.login);
+    window.location.replace(path.Login);
   };
   const { user } = useAuthContext();
   return (
