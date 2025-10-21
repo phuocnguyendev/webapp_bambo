@@ -1,25 +1,13 @@
+import { path } from "@/constants/path";
+import authApis from "@/features/Auth/apis/auth.apis";
+import { clearTokens, getTokenFromLocalStorage } from "@/lib/auth";
+import { refreshTokenHelper } from "@/utils/helpers";
 import axios, {
   AxiosError,
   HttpStatusCode,
   type InternalAxiosRequestConfig,
 } from "axios";
 import { toast } from "react-toastify";
-import { clearTokens, getTokenFromLocalStorage } from "@/lib/auth";
-import { path } from "@/constants/path";
-import { refreshTokenHelper } from "@/utils/helpers";
-
-const accountApis = {
-  PostRefreshToken: async ({ refreshToken }: { refreshToken: string }) => {
-    return {
-      data: {
-        Item: {
-          accessToken: "dummy-access-token",
-          refreshToken: "dummy-refresh-token",
-        },
-      },
-    };
-  },
-};
 
 let refreshTokenInProgress: Promise<string> | null = null;
 let failedQueue: FailedQueueItem[] = [];
@@ -60,7 +48,7 @@ function parseErrorMessageFromBlob(
 }
 
 async function handleTokenRefresh(refreshToken: string): Promise<string> {
-  const resp = await accountApis.PostRefreshToken({ refreshToken });
+  const resp = await authApis.PostRefreshToken({ refreshToken });
   const newAccessToken = await refreshTokenHelper(resp.data.Item);
   if (!newAccessToken) throw new Error("Failed to refresh the token");
   return newAccessToken;
@@ -130,7 +118,6 @@ axiosInstance.interceptors.response.use(
       !originalRequest._retry
     ) {
       if (refreshTokenInProgress) {
-        // If token refresh is already in progress, add to failedQueue
         return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -142,7 +129,6 @@ axiosInstance.interceptors.response.use(
           })
           .catch((err) => Promise.reject(err));
       } else {
-        // Start a new refreshToken request
         refreshTokenInProgress = new Promise<string>(
           async (resolve, reject) => {
             try {
