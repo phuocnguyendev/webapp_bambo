@@ -5,7 +5,7 @@ import { isNull, omitBy } from "lodash";
 const endPoint = `api/v1/Permission`;
 
 const permissionApis = {
-  GetAll: (param: SearchPermissionParams) => {
+  GetAll: (param: SearchQueryPermissionParams) => {
     return HttpService.GET<ResponseApi<PageModelResponse<PermissionUpdate>>>(
       `/${endPoint}/GetAll?${serialize(
         omitBy(

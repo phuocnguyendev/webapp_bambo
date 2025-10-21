@@ -3,51 +3,43 @@ import { PaginationTable } from "@/components/PaginationTable";
 import Title from "@/components/ui/title";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import CreateUpdateAccountModal from "../components/ModalCreateUpdate";
+import { useNavigate } from "react-router-dom";
 import { CirclePlus } from "lucide-react";
-import {
-  useAccountList,
-  useDeleteAccount,
-  useGetDetailAccount,
-} from "../hooks/useAccount";
+
 import useQueryConfig from "../hooks/useQueryConfig";
 import { Button } from "@/components/ui/button";
 import ModalDelete from "../../../components/ModalDelete";
+import { useDeleteProduct, useProductList } from "../hooks/useProduct";
+import getProductColumns from "../config/productColumns";
 import SearchForm from "../components/SearchForm";
-import getAccountColumns from "../config/accountConfig";
+import { path } from "@/constants/path";
 
-export default function AccountList() {
-  const { data, isLoading, isError } = useAccountList();
+const ProductList = () => {
+  const { data, isLoading, isError } = useProductList();
   const queryClient = useQueryClient();
-  const [modalOpen, setModalOpen] = useState<"create" | "delete" | null>(null);
-
+  const [modalOpen, setModalOpen] = useState<"delete" | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  const { data: detailData } = useGetDetailAccount(selectedId ?? "");
-
-  const { mutateAsync: deleteMutation } = useDeleteAccount();
+  const { mutateAsync: deleteMutation } = useDeleteProduct();
+  const navigate = useNavigate();
 
   if (isError) return <ErrorFallback />;
 
   const { queryParams, setQueryParams } = useQueryConfig();
-
   const currentPage = queryParams.page ?? 1;
   const pageSize = queryParams.pageSize ?? 10;
-
-  const handleEdit = (item: AccountListResponse) => {
-    setSelectedId(item.Id);
-    setModalOpen("create");
-  };
-
-  const handleCreate = () => {
-    setSelectedId(null);
-    setModalOpen("create");
-  };
-
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const handleDelete = (item: AccountListResponse) => {
+
+  const handleDelete = (item: ProductListResponse) => {
     setSelectedId(item.Id);
     setModalOpen("delete");
+  };
+
+  const handleEdit = (item: ProductListResponse) => {
+    navigate(`${path.ProductManagement}/${item.Id}`);
+  };
+
+  const handleAddNew = () => {
+    navigate(path.ProductAdd);
   };
 
   const handleConfirmDelete = async () => {
@@ -57,7 +49,7 @@ export default function AccountList() {
       await deleteMutation(selectedId);
       queryClient.setQueryData(
         ["account-list", queryParams],
-        (oldData?: PageModelResponse<AccountListResponse>) => {
+        (oldData?: PageModelResponse<ProductListResponse>) => {
           if (!oldData) return oldData;
           return {
             ...oldData,
@@ -75,21 +67,21 @@ export default function AccountList() {
     }
   };
 
-  const columns = getAccountColumns(currentPage, pageSize, {
-    onEdit: handleEdit,
+  const columns = getProductColumns(currentPage, pageSize, {
     onDelete: handleDelete,
+    onEdit: handleEdit,
   });
   return (
     <div className="px-4">
       <div className="flex items-center justify-between">
-        <Title title="Quản lý tài khoản" />
+        <Title title="Quản lý sản phẩm" />
       </div>
       <SearchForm />
       <div className="mb-2">
         <Button
           variant="default"
-          onClick={handleCreate}
           icon={<CirclePlus size={16} />}
+          onClick={handleAddNew}
         >
           Thêm mới
         </Button>
@@ -108,14 +100,6 @@ export default function AccountList() {
         tableHeaderClassName="bg-green-700 text-white rounded-t-lg"
       />
 
-      <CreateUpdateAccountModal
-        open={modalOpen === "create"}
-        data={detailData}
-        onOpenChange={(open) => {
-          setModalOpen(open ? "create" : null);
-          if (!open) setSelectedId(null);
-        }}
-      />
       <ModalDelete
         open={modalOpen === "delete"}
         onOpenChange={(open) => {
@@ -126,8 +110,9 @@ export default function AccountList() {
         }}
         onOk={handleConfirmDelete}
         loading={loadingDelete}
-        title="Bạn có chắc chắn muốn xóa tài khoản này?"
+        title="Bạn có chắc chắn muốn xóa sản phẩm này?"
       />
     </div>
   );
-}
+};
+export default ProductList;

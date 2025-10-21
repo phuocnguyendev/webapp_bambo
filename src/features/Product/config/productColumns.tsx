@@ -9,49 +9,73 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { TooltipSimple } from "@/components/ui/tooltip";
+import { formatToVND } from "@/utils/utils";
 
-const getAccountColumns = (
+const getProductColumns = (
   currentPage: number,
   pageSize: number,
   handlers?: {
-    onEdit?: (item: AccountListResponse) => void;
-    onDelete?: (item: AccountListResponse) => void;
+    onEdit?: (item: ProductListResponse) => void;
+    onDelete?: (item: ProductListResponse) => void;
   }
-): ColumnDefCustom<AccountListResponse>[] => {
+): ColumnDefCustom<ProductListResponse>[] => {
   return [
     {
       id: "Stt",
       header: "STT",
-      cell: ({ row }: { row: Row<AccountListResponse> }) => (
+      cell: ({ row }: { row: Row<ProductListResponse> }) => (
         <div>{(currentPage - 1) * pageSize + row.index + 1}</div>
       ),
       size: 50,
     },
     {
       id: "Name",
-      header: "Tên nhân viên",
+      header: "Tên sản phẩm",
       accessorKey: "Name",
       size: 220,
       enableSorting: false,
     },
     {
-      id: "Email",
-      header: "Email",
-      accessorKey: "Email",
-      size: 260,
+      id: "Code",
+      header: "Mã sản phẩm",
+      accessorKey: "Code",
+      size: 130,
       enableSorting: false,
     },
     {
-      id: "Phone",
-      header: "Điện thoại",
-      accessorKey: "Phone",
+      id: "Material",
+      header: "Chất liệu",
+      accessorKey: "Material",
+      size: 160,
+      enableSorting: false,
+    },
+    {
+      id: "BaseCost",
+      header: "Giá gốc",
+      accessorKey: "BaseCost",
+      size: 160,
+      enableSorting: false,
+      cell: ({ row }: { row: Row<ProductListResponse> }) =>
+        formatToVND(row.original.BaseCost),
+    },
+    {
+      id: "CountryOfOrigin",
+      header: "Xuất xứ",
+      accessorKey: "CountryOfOrigin",
+      size: 160,
+      enableSorting: false,
+    },
+    {
+      id: "Note",
+      header: "Ghi chú",
+      accessorKey: "Note",
       size: 160,
       enableSorting: false,
     },
     {
       id: "Status",
       header: "Trạng thái",
-      cell: ({ row }: { row: Row<AccountListResponse> }) =>
+      cell: ({ row }: { row: Row<ProductListResponse> }) =>
         row.original.Status ? (
           <span className="text-green-600 font-medium">Đang hoạt động</span>
         ) : (
@@ -62,12 +86,10 @@ const getAccountColumns = (
     {
       id: "Actions",
       header: "Hành động",
-      cell: ({ row }: { row: Row<AccountListResponse> }) => {
+      cell: ({ row }: { row: Row<ProductListResponse> }) => {
         const item = row.original;
-
         const handleEdit = () => handlers?.onEdit?.(item);
         const handleDelete = () => handlers?.onDelete?.(item);
-
         return (
           <div className="flex items-center relative">
             <TooltipSimple title="Cập nhật">
@@ -90,12 +112,9 @@ const getAccountColumns = (
                     />
                   </DropdownMenuTrigger>
                 </TooltipSimple>
-
                 <DropdownMenuContent>
                   <DropdownMenuItem
-                    onClick={() => {
-                      handleDelete();
-                    }}
+                    onClick={handleDelete}
                     className="text-red-600"
                   >
                     <Trash2 size={14} />
@@ -112,4 +131,4 @@ const getAccountColumns = (
   ];
 };
 
-export default getAccountColumns;
+export default getProductColumns;

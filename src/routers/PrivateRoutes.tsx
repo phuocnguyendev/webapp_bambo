@@ -9,6 +9,7 @@ import { Navigate, Outlet, type RouteObject } from "react-router-dom";
 const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 const RoleRoutes = lazy(() => import("@/features/Role/routes"));
 const PermissionRoutes = lazy(() => import("@/features/Permission/routes"));
+const ProductRoutes = lazy(() => import("@/features/Product/routes"));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
@@ -34,18 +35,23 @@ const PrivateRoutes: RouteObject[] = [
     errorElement: <ErrorFallback />,
     children: [
       {
-        path: path.ManagementAccount,
+        path: path.ManagementAccount + "/*",
         element: <AccountRoutes />,
         errorElement: <ErrorFallback />,
       },
       {
-        path: path.PhanQuyen,
+        path: path.PhanQuyen + "/*",
         element: <RoleRoutes />,
         errorElement: <ErrorFallback />,
       },
       {
-        path: path.PermissionGroup,
+        path: path.PermissionGroup + "/*",
         element: <PermissionRoutes />,
+        errorElement: <ErrorFallback />,
+      },
+      {
+        path: path.ProductManagement + "/*",
+        element: <ProductRoutes />,
         errorElement: <ErrorFallback />,
       },
       {

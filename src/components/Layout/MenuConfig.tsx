@@ -72,18 +72,10 @@ export const MenuConfig: SidebarMenuItem[] = [
     children: [
       {
         label: "Danh mục sản phẩm",
-        path: path.CourseManagement,
+        path: path.ProductManagement,
         helmet: {
           title: "Danh mục sản phẩm - Bamboo Warehouse",
           description: "Quản lý danh mục sản phẩm",
-        },
-      },
-      {
-        label: "Thương hiệu",
-        path: "/product/brand",
-        helmet: {
-          title: "Thương hiệu - Bamboo Warehouse",
-          description: "Quản lý thương hiệu sản phẩm",
         },
       },
     ],

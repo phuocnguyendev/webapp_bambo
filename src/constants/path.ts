@@ -5,4 +5,10 @@ export const path = {
   ManagementAccount: "/QuanLyTaiKhoan",
   PhanQuyen: "/PhanQuyen",
   PermissionGroup: "/Permission",
+
+  //Product Management
+  ProductManagement: "/QuanLySanPham/SanPham",
+  ProductDetail: "/QuanLySanPham/SanPham/:id",
+  ProductAdd: "/QuanLySanPham/SanPham/ThemMoi",
+  AddProductExcel: "/QuanLySanPham/ThemSanPhamExcel",
 };

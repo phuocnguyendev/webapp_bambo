@@ -11,3 +11,10 @@ export const handleTrimSpaces = (value?: string) => {
   if (!value) return "";
   return value.trim().replace(/\s+/g, " ");
 };
+
+export const formatToVND = (amount: number): string => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(amount);
+};

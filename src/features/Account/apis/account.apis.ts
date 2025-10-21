@@ -6,7 +6,7 @@ const endPoint = `api/v1/User`;
 const endPointRole = `api/v1/Role`;
 
 const accountApis = {
-  GetAll: (param: SearchAccountParams) => {
+  GetAll: (param: SearchQueryAccountParams) => {
     return HttpService.GET<ResponseApi<PageModelResponse<AccountListResponse>>>(
       `/${endPoint}/GetAll?${serialize(
         omitBy(

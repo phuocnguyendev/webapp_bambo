@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { ScrollArea } from "../ui/scroll-area";
 import type { SidebarMenuItem as SidebarMenuItemType } from "./MenuConfig";
@@ -24,20 +24,32 @@ function SidebarMenuItem({
 }) {
   const location = useLocation();
   const normalizePath = (base: string, p?: string) => {
-    if (!p) return base;
+    if (!p) return base || "/";
     if (p.startsWith("/")) return p;
     if (!base || base === "/") return "/" + p;
     return base.replace(/\/$/, "") + "/" + p;
   };
-
+  const isSameOrChild = (curr: string, base: string) => {
+    if (!base) return false;
+    if (curr === base) return true;
+    return curr.startsWith(base.endsWith("/") ? base : base + "/");
+  };
   const fullPath = normalizePath(parentPath, item.path);
-  const isActive = location.pathname === fullPath;
-  const isAnyChildActive =
-    item.children &&
-    item.children.some((child: SidebarMenuItemType) => {
-      const childFullPath = normalizePath(fullPath, child.path);
-      return location.pathname === childFullPath;
+  const isActive = isSameOrChild(location.pathname, fullPath);
+  const hasActiveDescendant = (
+    node: SidebarMenuItemType,
+    nodeBase: string
+  ): boolean => {
+    if (!node.children) return false;
+    return node.children.some((child) => {
+      const childPath = normalizePath(nodeBase, child.path);
+      return (
+        isSameOrChild(location.pathname, childPath) ||
+        hasActiveDescendant(child, childPath)
+      );
     });
+  };
+  const isAnyChildActive = hasActiveDescendant(item, fullPath);
 
   const [open, setOpen] = useState<boolean>(!!isAnyChildActive);
 
@@ -49,6 +61,10 @@ function SidebarMenuItem({
       setOpen((prev) => !prev);
     }
   };
+
+  useEffect(() => {
+    setOpen(isAnyChildActive);
+  }, [location.pathname]);
   return (
     <div className={cn("mb-2", level > 0 && "ml-2")}>
       <NavLink
@@ -63,7 +79,6 @@ function SidebarMenuItem({
               : "hover:bg-gray-100 text-gray-800"
           )
         }
-        end
         onClick={handleParentClick}
         aria-expanded={item.children ? open : undefined}
         title={isCollapsed ? item.label : undefined}
