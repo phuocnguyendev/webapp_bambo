@@ -62,7 +62,7 @@ export default function CreateUpdateAccountModal({
   const handleSubmit = form.handleSubmit(async (values) => {
     try {
       if (!data?.Id) {
-        await createMutation(values);
+        await createMutation(values as Role);
         toast.success("Tạo phân quyền thành công");
       } else {
         await updateMutation({
