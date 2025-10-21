@@ -23,17 +23,21 @@ function SidebarMenuItem({
   isCollapsed?: boolean;
 }) {
   const location = useLocation();
-  const fullPath = item.path.startsWith("/")
-    ? item.path
-    : parentPath + (item.path ? "/" + item.path : "");
+  const normalizePath = (base: string, p?: string) => {
+    if (!p) return base;
+    if (p.startsWith("/")) return p;
+    if (!base || base === "/") return "/" + p;
+    return base.replace(/\/$/, "") + "/" + p;
+  };
+
+  const fullPath = normalizePath(parentPath, item.path);
   const isActive = location.pathname === fullPath;
   const isAnyChildActive =
     item.children &&
-    item.children.some(
-      (child: SidebarMenuItemType) =>
-        location.pathname ===
-        (child.path.startsWith("/") ? child.path : fullPath + "/" + child.path)
-    );
+    item.children.some((child: SidebarMenuItemType) => {
+      const childFullPath = normalizePath(fullPath, child.path);
+      return location.pathname === childFullPath;
+    });
 
   const [open, setOpen] = useState<boolean>(!!isAnyChildActive);
 

@@ -16,7 +16,7 @@ import React from "react";
 
 export interface SidebarMenuItem {
   label: string;
-  path: string;
+  path?: string;
   icon?: React.ReactNode;
   children?: SidebarMenuItem[];
   helmet?: {
@@ -37,7 +37,7 @@ export const MenuConfig: SidebarMenuItem[] = [
   },
   {
     label: "Quản lý tài khoản",
-    path: path.QuanLyTaiKhoan,
+    path: path.ManagementAccount,
     icon: <User size={20} />,
     helmet: {
       title: "Quản lý tài khoản - Bamboo Warehouse",
@@ -45,17 +45,16 @@ export const MenuConfig: SidebarMenuItem[] = [
     },
   },
   {
-    label: "Nhóm quyền",
-    path: path.NhomQuyen,
+    label: "Phân quyền",
+    path: path.PhanQuyen,
     icon: <ShieldCheck size={20} />,
     helmet: {
-      title: "Nhóm quyền - Bamboo Warehouse",
-      description: "Quản lý Nhóm quyền người dùng",
+      title: "Phân quyền - Bamboo Warehouse",
+      description: "Quản lý Phân quyền người dùng",
     },
   },
   {
     label: "Sản phẩm",
-    path: path.CourseManagement,
     icon: <Package size={20} />,
     helmet: {
       title: "Quản lý sản phẩm - Bamboo Warehouse",

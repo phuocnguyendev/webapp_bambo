@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useQueryClient } from "@tanstack/react-query";
 import { useCreateRole, useRoleUpdate } from "../hooks/useRole";
 import { RoleSchema } from "../rules/validationSchema";
 import Title from "@/components/ui/title";
@@ -21,6 +20,7 @@ type Props = {
   open: boolean;
   data?: Partial<RoleUpdate>;
   onOpenChange: (open: boolean) => void;
+  refetch: () => void;
 };
 
 const defaultValues = {
@@ -31,12 +31,12 @@ export default function CreateUpdateAccountModal({
   open,
   data,
   onOpenChange,
+  refetch,
 }: Props) {
   const form = useForm<z.infer<typeof RoleSchema>>({
     resolver: zodResolver(RoleSchema),
     defaultValues,
   });
-  const queryClient = useQueryClient();
   const { mutateAsync: createMutation, isPending: isCreating } =
     useCreateRole();
   const { mutateAsync: updateMutation, isPending: isUpdating } =
@@ -71,7 +71,7 @@ export default function CreateUpdateAccountModal({
         } as RoleUpdate);
         toast.success("Cập nhật phân quyền thành công");
       }
-      queryClient.invalidateQueries({ queryKey: ["permissionList"] });
+      refetch();
       onOpenChange(false);
     } catch (err) {
       console.log(err);
@@ -82,7 +82,7 @@ export default function CreateUpdateAccountModal({
     try {
       await createMutation(values as Role);
       toast.success("Tạo phân quyền thành công");
-      queryClient.invalidateQueries({ queryKey: ["permissionList"] });
+      refetch();
       form.reset(defaultValues);
     } catch (err) {
       console.log(err);

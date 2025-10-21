@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { TooltipSimple } from "@/components/ui/tooltip";
+import { convertToLocalTime } from "@/utils/dayjsConfig";
 
 const getRoleColumns = (handlers?: {
   onEdit?: (item: RoleUpdate) => void;
@@ -35,7 +36,19 @@ const getRoleColumns = (handlers?: {
       size: 260,
       enableSorting: false,
     },
-
+    {
+      id: "LastUpdatedAt",
+      header: "Ngày cập nhật",
+      accessorKey: "LastUpdatedAt",
+      size: 260,
+      enableSorting: false,
+      cell: ({ row }: { row: Row<RoleUpdate> }) => {
+        const date = new Date(row.original.LastUpdatedAt);
+        return (
+          <div>{convertToLocalTime(date).format("DD/MM/YYYY HH:mm:ss")}</div>
+        );
+      },
+    },
     {
       id: "Actions",
       header: "Hành động",

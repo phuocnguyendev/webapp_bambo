@@ -1,6 +1,5 @@
 import ErrorFallback from "@/components/ErrorFallback";
 import Title from "@/components/ui/title";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,9 @@ import { useDeleteRole, useRoleList } from "../hooks/useRole";
 import { DataTable } from "@/components/ui/data-table";
 import getRoleColumns from "../config/roleConfig";
 import ModalCreateUpdate from "../components/ModalCreateUpdate";
+import { toast } from "react-toastify";
 export default function RoleList() {
-  const { data, isLoading, isError } = useRoleList();
-  const queryClient = useQueryClient();
+  const { data, isLoading, isError, refetch } = useRoleList();
   const [modalOpen, setModalOpen] = useState<"role" | "delete" | null>(null);
   const [selectedItem, setSelectedItem] = useState<RoleUpdate | null>(null);
 
@@ -40,17 +39,10 @@ export default function RoleList() {
     setLoadingDelete(true);
     try {
       await deleteMutation(selectedItem.Id);
-      queryClient.setQueryData(
-        ["permissionList"],
-        (oldData?: ResponseApi<RoleUpdate>) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-          };
-        }
-      );
+      refetch();
       setModalOpen(null);
       setSelectedItem(null);
+      toast.success("Xóa phân quyền thành công");
     } finally {
       setLoadingDelete(false);
     }
@@ -66,7 +58,7 @@ export default function RoleList() {
       <div className="flex items-center justify-between">
         <Title title="Quản lý phân quyền" />
       </div>
-      <div className="my-2">
+      <div className="my-3">
         <Button
           variant="default"
           onClick={handleCreate}
@@ -90,6 +82,7 @@ export default function RoleList() {
           if (!open) setSelectedItem(null);
         }}
         data={selectedItem!}
+        refetch={refetch}
       />
 
       <ModalDelete
