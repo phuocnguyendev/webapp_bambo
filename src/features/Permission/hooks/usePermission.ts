@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import accountApis from "../apis/account.apis";
+import permissionApis from "../apis/permission.apis";
 import useQueryConfig from "./useQueryConfig";
 
-export const useCreateAccount = () => {
+export const useCreatePermission = () => {
   const mutation = useMutation({
-    mutationFn: async (data: Account) => {
-      const resp = await accountApis.Create(data);
+    mutationFn: async (data: Permission) => {
+      const resp = await permissionApis.Create(data);
       return resp.data.Item;
     },
   });
@@ -15,13 +15,13 @@ export const useCreateAccount = () => {
   };
 };
 
-export const useAccountList = () => {
+export const usePermissionList = () => {
   const { queryParams } = useQueryConfig();
 
   const queryData = useQuery({
-    queryKey: ["account-list", queryParams],
+    queryKey: ["permission-list", queryParams],
     queryFn: async () => {
-      const resp = await accountApis.GetAll({ ...queryParams });
+      const resp = await permissionApis.GetAll({ ...queryParams });
       return resp.data.Item;
     },
   });
@@ -31,10 +31,10 @@ export const useAccountList = () => {
   };
 };
 
-export const useUpdateAccount = () => {
+export const usePermissionUpdate = () => {
   const mutation = useMutation({
-    mutationFn: async (data: AccountUpdate) => {
-      const resp = await accountApis.Update(data);
+    mutationFn: async (data: PermissionUpdate) => {
+      const resp = await permissionApis.Update(data);
       return resp.data.Item;
     },
   });
@@ -44,11 +44,11 @@ export const useUpdateAccount = () => {
   };
 };
 
-export const useGetDetailAccount = (id: string) => {
+export const useGetDetailPermission = (id: string) => {
   const queryData = useQuery({
-    queryKey: ["accountDetail", id],
+    queryKey: ["permissionDetail", id],
     queryFn: async () => {
-      const resp = await accountApis.GetById(id);
+      const resp = await permissionApis.GetById(id);
       return resp.data.Item;
     },
     enabled: !!id,
@@ -59,10 +59,10 @@ export const useGetDetailAccount = (id: string) => {
   };
 };
 
-export const useDeleteAccount = () => {
+export const useDeletePermission = () => {
   const mutation = useMutation({
     mutationFn: async (id: string) => {
-      const resp = await accountApis.Delete(id);
+      const resp = await permissionApis.Delete(id);
       return resp.data.Item;
     },
   });

@@ -103,7 +103,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
       {crumbs.map((item, idx) => (
         <React.Fragment key={item.path}>
           <span className="mx-1 text-green-700">&#187;</span>
-          {idx === crumbs!.length - 1 ? (
+          {idx === 0 || idx === crumbs!.length - 1 ? (
             <span className="text-gray-900">{item.label}</span>
           ) : (
             <Link to={item.path} className="text-green-700 hover:underline">

@@ -90,7 +90,7 @@ export default function CreateUpdateAccountModal({
         } as AccountUpdate);
         toast.success("Cập nhật tài khoản thành công");
       }
-      queryClient.invalidateQueries({ queryKey: ["accountList"] });
+      queryClient.invalidateQueries({ queryKey: ["account-list"] });
       onOpenChange(false);
     } catch (err: any) {
       console.log(err);
@@ -112,7 +112,7 @@ export default function CreateUpdateAccountModal({
     try {
       await createMutation(values as Account);
       toast.success("Tạo tài khoản thành công");
-      queryClient.invalidateQueries({ queryKey: ["accountList"] });
+      queryClient.invalidateQueries({ queryKey: ["account-list"] });
       form.reset(defaultValues);
     } catch (err: any) {
       if (

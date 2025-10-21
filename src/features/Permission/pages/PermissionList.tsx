@@ -1,91 +1,70 @@
 import ErrorFallback from "@/components/ErrorFallback";
-import { PaginationTable } from "@/components/PaginationTable";
 import Title from "@/components/ui/title";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import CreateUpdateAccountModal from "../components/ModalCreateUpdate";
 import { CirclePlus } from "lucide-react";
-import { getAccountColumns } from "../config/accountConfig";
-import {
-  useAccountList,
-  useDeleteAccount,
-  useGetDetailAccount,
-} from "../hooks/useAccount";
-import useQueryConfig from "../hooks/useQueryConfig";
 import { Button } from "@/components/ui/button";
 import ModalDelete from "../../../components/ModalDelete";
-import SearchForm from "../components/SearchForm";
-
-export default function AccountList() {
-  const { data, isLoading, isError } = useAccountList();
-  const queryClient = useQueryClient();
+import getPermissionColumns from "../config/permissionColumns";
+import ModalCreateUpdate from "../components/ModalCreateUpdate";
+import { toast } from "react-toastify";
+import { useDeletePermission, usePermissionList } from "../hooks/usePermission";
+import { PaginationTable } from "@/components/PaginationTable";
+import useQueryConfig from "../hooks/useQueryConfig";
+import { useQueryClient } from "@tanstack/react-query";
+const PermissionList = () => {
+  const { data, isLoading, isError } = usePermissionList();
   const [modalOpen, setModalOpen] = useState<"create" | "delete" | null>(null);
-
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  const { data: detailData } = useGetDetailAccount(selectedId ?? "");
-
-  const { mutateAsync: deleteMutation } = useDeleteAccount();
-
-  if (isError) return <ErrorFallback />;
-
+  const [selectedItem, setSelectedItem] = useState<PermissionUpdate | null>(
+    null
+  );
+  const { mutateAsync: deleteMutation } = useDeletePermission();
   const { queryParams, setQueryParams } = useQueryConfig();
-
+  const queryClient = useQueryClient();
   const currentPage = queryParams.page ?? 1;
   const pageSize = queryParams.pageSize ?? 10;
+  if (isError) return <ErrorFallback />;
 
-  const handleEdit = (item: AccountListResponse) => {
-    setSelectedId(item.Id);
+  const handleEdit = (item: PermissionUpdate) => {
+    setSelectedItem(item);
     setModalOpen("create");
   };
 
   const handleCreate = () => {
-    setSelectedId(null);
+    setSelectedItem(null);
     setModalOpen("create");
   };
 
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const handleDelete = (item: AccountListResponse) => {
-    setSelectedId(item.Id);
+  const handleDelete = (item: PermissionUpdate) => {
+    setSelectedItem(item);
     setModalOpen("delete");
   };
 
   const handleConfirmDelete = async () => {
-    if (!selectedId) return;
+    if (!selectedItem?.Id) return;
     setLoadingDelete(true);
     try {
-      await deleteMutation(selectedId);
-      queryClient.setQueryData(
-        ["account-list", queryParams],
-        (oldData?: PageModelResponse<AccountListResponse>) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            ListModel: oldData.ListModel.filter(
-              (item) => item.Id !== selectedId
-            ),
-            Count: oldData.Count > 0 ? oldData.Count - 1 : 0,
-          };
-        }
-      );
+      await deleteMutation(selectedItem.Id);
+      queryClient.invalidateQueries({ queryKey: ["permission-list"] });
       setModalOpen(null);
-      setSelectedId(null);
+      setSelectedItem(null);
+      toast.success("Xóa nhóm quyền thành công");
     } finally {
       setLoadingDelete(false);
     }
   };
 
-  const columns = getAccountColumns(currentPage, pageSize, {
+  const columns = getPermissionColumns({
     onEdit: handleEdit,
     onDelete: handleDelete,
   });
+
   return (
     <div className="px-4">
       <div className="flex items-center justify-between">
-        <Title title="Quản lý tài khoản" />
+        <Title title="Quản lý nhóm quyền" />
       </div>
-      <SearchForm />
-      <div className="mb-2">
+      <div className="my-3">
         <Button
           variant="default"
           onClick={handleCreate}
@@ -108,26 +87,29 @@ export default function AccountList() {
         tableHeaderClassName="bg-green-700 text-white rounded-t-lg"
       />
 
-      <CreateUpdateAccountModal
+      <ModalCreateUpdate
         open={modalOpen === "create"}
-        data={detailData}
         onOpenChange={(open) => {
           setModalOpen(open ? "create" : null);
-          if (!open) setSelectedId(null);
+          if (!open) setSelectedItem(null);
         }}
+        data={selectedItem!}
       />
+
       <ModalDelete
         open={modalOpen === "delete"}
         onOpenChange={(open) => {
           if (!open) {
             setModalOpen(null);
-            setSelectedId(null);
+            setSelectedItem(null);
           }
         }}
         onOk={handleConfirmDelete}
         loading={loadingDelete}
-        title="Bạn có chắc chắn muốn xóa tài khoản này?"
+        title="Bạn có muốn xóa nhóm quyền này?"
       />
     </div>
   );
-}
+};
+
+export default PermissionList;

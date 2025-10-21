@@ -10,8 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useCreateRole, useRoleUpdate } from "../hooks/useRole";
-import { RoleSchema } from "../rules/validationSchema";
+import {
+  useCreatePermission,
+  usePermissionUpdate,
+} from "../hooks/usePermission";
+import { PermissionSchema } from "../rules/validationSchema";
 import Title from "@/components/ui/title";
 import RenderField from "../../../components/RenderField";
 import { toast } from "react-toastify";
@@ -32,14 +35,14 @@ export default function CreateUpdateAccountModal({
   data,
   onOpenChange,
 }: Props) {
-  const form = useForm<z.infer<typeof RoleSchema>>({
-    resolver: zodResolver(RoleSchema),
+  const form = useForm<z.infer<typeof PermissionSchema>>({
+    resolver: zodResolver(PermissionSchema),
     defaultValues,
   });
   const { mutateAsync: createMutation, isPending: isCreating } =
-    useCreateRole();
+    useCreatePermission();
   const { mutateAsync: updateMutation, isPending: isUpdating } =
-    useRoleUpdate();
+    usePermissionUpdate();
   const queryClient = useQueryClient();
   useEffect(() => {
     if (open && data?.Id && data) {
@@ -54,7 +57,7 @@ export default function CreateUpdateAccountModal({
   }, [open, data, form]);
 
   const titleText = useMemo(
-    () => (data?.Id ? "Cập nhật phân quyền" : "Tạo phân quyền"),
+    () => (data?.Id ? "Cập nhật nhóm quyền" : "Tạo nhóm quyền"),
     [data]
   );
 
@@ -62,15 +65,15 @@ export default function CreateUpdateAccountModal({
     try {
       if (!data?.Id) {
         await createMutation(values as Role);
-        toast.success("Tạo phân quyền thành công");
+        toast.success("Tạo nhóm quyền thành công");
       } else {
         await updateMutation({
           ...values,
           Id: data.Id,
         } as RoleUpdate);
-        toast.success("Cập nhật phân quyền thành công");
+        toast.success("Cập nhật nhóm quyền thành công");
       }
-      queryClient.invalidateQueries({ queryKey: ["role-list"] });
+      queryClient.invalidateQueries({ queryKey: ["permission-list"] });
       onOpenChange(false);
     } catch (err) {
       console.log(err);
@@ -80,8 +83,8 @@ export default function CreateUpdateAccountModal({
   const handleSubmitAndReset = form.handleSubmit(async (values) => {
     try {
       await createMutation(values as Role);
-      toast.success("Tạo phân quyền thành công");
-      queryClient.invalidateQueries({ queryKey: ["role-list"] });
+      toast.success("Tạo nhóm quyền thành công");
+      queryClient.invalidateQueries({ queryKey: ["permission-list"] });
       form.reset(defaultValues);
     } catch (err) {
       console.log(err);
@@ -102,15 +105,15 @@ export default function CreateUpdateAccountModal({
                 <RenderField
                   control={form.control}
                   name="Name"
-                  label="Tên phân quyền"
-                  placeholder="Nhập tên phân quyền"
+                  label="Tên nhóm quyền"
+                  placeholder="Nhập tên nhóm quyền"
                   type="text"
                 />
                 <RenderField
                   control={form.control}
                   name="Code"
-                  label="Mã phân quyền"
-                  placeholder="Nhập mã phân quyền"
+                  label="Mã nhóm quyền"
+                  placeholder="Nhập mã nhóm quyền"
                   type="text"
                 />
               </div>

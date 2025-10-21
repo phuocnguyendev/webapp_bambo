@@ -7,6 +7,7 @@ import {
   Package,
   Repeat,
   ShieldCheck,
+  ShieldQuestionMark,
   Truck,
   User,
   Users,
@@ -24,7 +25,6 @@ export interface SidebarMenuItem {
     description?: string;
   };
 }
-
 export const MenuConfig: SidebarMenuItem[] = [
   {
     label: "Trang chủ",
@@ -50,7 +50,16 @@ export const MenuConfig: SidebarMenuItem[] = [
     icon: <ShieldCheck size={20} />,
     helmet: {
       title: "Phân quyền - Bamboo Warehouse",
-      description: "Quản lý Phân quyền người dùng",
+      description: "Quản lý phân quyền người dùng",
+    },
+  },
+  {
+    label: "Nhóm quyền",
+    path: path.PermissionGroup,
+    icon: <ShieldQuestionMark size={20} />,
+    helmet: {
+      title: "Nhóm quyền - Bamboo Warehouse",
+      description: "Quản lý nhóm quyền người dùng",
     },
   },
   {

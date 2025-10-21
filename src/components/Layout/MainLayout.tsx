@@ -33,12 +33,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           size="icon"
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           className="absolute top-20 -right-3 bg-white border border-gray-200 shadow-md hover:bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center z-50 p-0"
-          title={isSidebarCollapsed ? "Mở sidebar" : "Thu nhỏ sidebar"}
+          title={isSidebarCollapsed ? "Mở Menu" : "Thu nhỏ Menu"}
         >
           {isSidebarCollapsed ? (
-            <ChevronRight className="h-3 w-3" />
+            <ChevronRight size={20} />
           ) : (
-            <ChevronLeft className="h-3 w-3" />
+            <ChevronLeft size={20} />
           )}
         </Button>
       </aside>

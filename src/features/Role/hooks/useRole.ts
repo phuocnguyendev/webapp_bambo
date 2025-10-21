@@ -16,7 +16,7 @@ export const useCreateRole = () => {
 
 export const useRoleList = () => {
   const queryData = useQuery({
-    queryKey: ["roleList"],
+    queryKey: ["role-list"],
     queryFn: async () => {
       const resp = await roleApis.GetAll();
       return resp.data.Item;

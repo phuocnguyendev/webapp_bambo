@@ -9,23 +9,24 @@ import { DataTable } from "@/components/ui/data-table";
 import getRoleColumns from "../config/roleConfig";
 import ModalCreateUpdate from "../components/ModalCreateUpdate";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 export default function RoleList() {
-  const { data, isLoading, isError, refetch } = useRoleList();
-  const [modalOpen, setModalOpen] = useState<"role" | "delete" | null>(null);
+  const { data, isLoading, isError } = useRoleList();
+  const [modalOpen, setModalOpen] = useState<"create" | "delete" | null>(null);
   const [selectedItem, setSelectedItem] = useState<RoleUpdate | null>(null);
-
+  const queryClient = useQueryClient();
   const { mutateAsync: deleteMutation } = useDeleteRole();
 
   if (isError) return <ErrorFallback />;
 
   const handleEdit = (item: RoleUpdate) => {
     setSelectedItem(item);
-    setModalOpen("role");
+    setModalOpen("create");
   };
 
   const handleCreate = () => {
     setSelectedItem(null);
-    setModalOpen("role");
+    setModalOpen("create");
   };
 
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -39,7 +40,7 @@ export default function RoleList() {
     setLoadingDelete(true);
     try {
       await deleteMutation(selectedItem.Id);
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ["role-list"] });
       setModalOpen(null);
       setSelectedItem(null);
       toast.success("Xóa phân quyền thành công");
@@ -76,13 +77,12 @@ export default function RoleList() {
       />
 
       <ModalCreateUpdate
-        open={modalOpen === "role"}
+        open={modalOpen === "create"}
         onOpenChange={(open) => {
-          setModalOpen(open ? "role" : null);
+          setModalOpen(open ? "create" : null);
           if (!open) setSelectedItem(null);
         }}
         data={selectedItem!}
-        refetch={refetch}
       />
 
       <ModalDelete

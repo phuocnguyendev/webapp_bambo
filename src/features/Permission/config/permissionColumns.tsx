@@ -11,27 +11,29 @@ import {
 import { TooltipSimple } from "@/components/ui/tooltip";
 import { convertToLocalTime } from "@/utils/dayjsConfig";
 
-const getRoleColumns = (handlers?: {
-  onEdit?: (item: RoleUpdate) => void;
-  onDelete?: (item: RoleUpdate) => void;
-}): ColumnDefCustom<RoleUpdate>[] => {
+const getPermissionColumns = (handlers?: {
+  onEdit?: (item: PermissionUpdate) => void;
+  onDelete?: (item: PermissionUpdate) => void;
+}): ColumnDefCustom<PermissionUpdate>[] => {
   return [
     {
       id: "Stt",
       header: "STT",
-      cell: ({ row }: { row: Row<RoleUpdate> }) => <div>{row.index + 1}</div>,
+      cell: ({ row }: { row: Row<PermissionUpdate> }) => (
+        <div>{row.index + 1}</div>
+      ),
       size: 50,
     },
     {
       id: "Name",
-      header: "Tên phân quyền",
+      header: "Tên nhóm quyền",
       accessorKey: "Name",
       size: 220,
       enableSorting: false,
     },
     {
       id: "Code",
-      header: "Mã phân quyền",
+      header: "Mã nhóm quyền",
       accessorKey: "Code",
       size: 260,
       enableSorting: false,
@@ -42,7 +44,7 @@ const getRoleColumns = (handlers?: {
       accessorKey: "LastUpdatedAt",
       size: 260,
       enableSorting: false,
-      cell: ({ row }: { row: Row<RoleUpdate> }) => {
+      cell: ({ row }: { row: Row<PermissionUpdate> }) => {
         const date = new Date(row.original.LastUpdatedAt);
         return (
           <div>{convertToLocalTime(date).format("DD/MM/YYYY HH:mm:ss")}</div>
@@ -52,7 +54,7 @@ const getRoleColumns = (handlers?: {
     {
       id: "Actions",
       header: "Hành động",
-      cell: ({ row }: { row: Row<RoleUpdate> }) => {
+      cell: ({ row }: { row: Row<PermissionUpdate> }) => {
         const item = row.original;
 
         const handleEdit = () => handlers?.onEdit?.(item);
@@ -101,4 +103,4 @@ const getRoleColumns = (handlers?: {
   ];
 };
 
-export default getRoleColumns;
+export default getPermissionColumns;

@@ -4,4 +4,5 @@ export const path = {
   CourseManagement: "/KhoaHoc",
   ManagementAccount: "/QuanLyTaiKhoan",
   PhanQuyen: "/PhanQuyen",
+  PermissionGroup: "/Permission",
 };
