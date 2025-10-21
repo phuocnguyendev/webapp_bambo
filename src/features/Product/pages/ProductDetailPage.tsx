@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import RenderField from "@/components/RenderField";
-import { useProductUpdate, useGetDetailProduct } from "../hooks/useProduct";
+import { Button } from "@/components/ui/button";
 import { STATUS_ACTIVE } from "@/constants/common";
+import { path } from "@/constants/path";
+import React, { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetDetailProduct, useProductUpdate } from "../hooks/useProduct";
 
 const defaultValues = {
   Code: "",
@@ -40,7 +41,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const { mutateAsync: updateProduct, status: updateStatus } =
     useProductUpdate();
   const { data: detailData } = useGetDetailProduct(id || "");
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (mode === "update" && detailData) {
       Object.entries(detailData).forEach(([key, value]) => {
@@ -164,7 +165,11 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
         {/* --- NÚT HÀNH ĐỘNG --- */}
         <div className="bg-white py-4 flex justify-end gap-3 border-t mt-4">
-          <Button type="button" variant="secondary">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => navigate(path.ProductManagement)}
+          >
             Quay về
           </Button>
           <Button type="submit" disabled={updateStatus === "pending"}>

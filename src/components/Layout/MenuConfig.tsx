@@ -25,6 +25,7 @@ export interface SidebarMenuItem {
     description?: string;
   };
 }
+
 export const MenuConfig: SidebarMenuItem[] = [
   {
     label: "Trang chủ",
