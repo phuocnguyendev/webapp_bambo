@@ -10,5 +10,5 @@ export const path = {
   ProductManagement: "/QuanLySanPham/SanPham",
   ProductDetail: "/QuanLySanPham/SanPham/:id",
   ProductAdd: "/QuanLySanPham/SanPham/ThemMoi",
-  AddProductExcel: "/QuanLySanPham/ThemSanPhamExcel",
+  AddProductExcel: "/QuanLySanPham/SanPham/Excel",
 };

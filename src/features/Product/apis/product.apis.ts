@@ -34,6 +34,31 @@ const productApis = {
       `/${endPoint}/Delete/${id}`
     );
   },
+
+  DownloadTemplate: () =>
+    HttpService.GET(`${endPoint}/DownloadTemplate`, {
+      responseType: "blob",
+    }),
+  Import: (data: File) => {
+    const formData = new FormData();
+    // backend expects the uploaded file field to be 'file' (lowercase) and accepting filename
+    formData.append("file", data, data.name);
+
+    return HttpService.POSTFORM<ResponseApi<ResponseExcel<any>>>(
+      `${endPoint}/Import`,
+      formData,
+      {
+        headers: { Accept: "*/*" },
+      }
+    );
+  },
+
+  ExportInvalidProduct: (data: InvalidProduct) =>
+    HttpService.POST(`${endPoint}/DownloadInvalidProduct`, data, {
+      responseType: "blob",
+    }),
+  InsertMany: (data: InsertManyProductRequest) =>
+    HttpService.POST<ResponseApi<any>>(`${endPoint}/InsertMany`, data),
 };
 
 export default productApis;
