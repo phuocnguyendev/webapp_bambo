@@ -20,6 +20,7 @@ interface RenderFieldProps {
   isSwitch?: boolean;
   disabled?: boolean;
   className?: string;
+  allowDecimal?: boolean;
 }
 
 const RenderField: React.FC<RenderFieldProps> = ({
@@ -32,6 +33,7 @@ const RenderField: React.FC<RenderFieldProps> = ({
   isSwitch = false,
   disabled = false,
   className,
+  allowDecimal = false,
 }) => {
   return (
     <FormField
@@ -75,6 +77,7 @@ const RenderField: React.FC<RenderFieldProps> = ({
                     className={
                       fieldState?.error ? "border border-destructive" : ""
                     }
+                    allowDecimal={allowDecimal}
                   />
                 )}
               </FormControl>

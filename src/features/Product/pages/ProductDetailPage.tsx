@@ -6,6 +6,8 @@ import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetDetailProduct, useProductUpdate } from "../hooks/useProduct";
+import { productSchema } from "../rules/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const defaultValues = {
   Code: "",
@@ -24,7 +26,7 @@ const defaultValues = {
   HeightCm: 0,
   Version: 1,
   ImageUrl: "",
-  Status: "true",
+  Status: true,
   Note: "",
 };
 
@@ -36,7 +38,11 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   mode = "update",
 }) => {
   const { id } = useParams();
-  const methods = useForm({ defaultValues });
+
+  const methods = useForm({
+    resolver: zodResolver(productSchema),
+    defaultValues,
+  });
   const { control, handleSubmit, setValue, reset } = methods;
   const { mutateAsync: updateProduct, status: updateStatus } =
     useProductUpdate();
@@ -68,7 +74,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 py-4">
-        {/* --- THÔNG TIN SẢN PHẨM --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-2xl shadow-sm border">
           <div className="col-span-1 flex flex-col items-center">
             <div className="relative w-40 h-40 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-gray-50 overflow-hidden">
@@ -107,6 +112,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               name="BaseCost"
               label="Giá gốc (₫)"
               type="number"
+              allowDecimal
             />
             <RenderField control={control} name="Barcode" label="Barcode" />
             <RenderField control={control} name="HSCode" label="HSCode" />
@@ -118,7 +124,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
         </div>
 
-        {/* --- KỸ THUẬT & KÍCH THƯỚC --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 rounded-2xl shadow-sm border">
           <div className="col-span-1 md:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
             <RenderField
@@ -126,24 +131,28 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               name="WeightKg"
               label="Khối lượng (kg)"
               type="number"
+              allowDecimal
             />
             <RenderField
               control={control}
               name="LengthCm"
               label="Dài (cm)"
               type="number"
+              allowDecimal
             />
             <RenderField
               control={control}
               name="WidthCm"
               label="Rộng (cm)"
               type="number"
+              allowDecimal
             />
             <RenderField
               control={control}
               name="HeightCm"
               label="Cao (cm)"
               type="number"
+              allowDecimal
             />
           </div>
           <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -163,7 +172,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
         </div>
 
-        {/* --- NÚT HÀNH ĐỘNG --- */}
         <div className="bg-white py-4 flex justify-end gap-3 border-t mt-4">
           <Button
             type="button"
