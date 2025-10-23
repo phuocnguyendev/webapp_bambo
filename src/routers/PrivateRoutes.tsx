@@ -10,7 +10,7 @@ const AccountRoutes = lazy(() => import("@/features/Account/routes"));
 const RoleRoutes = lazy(() => import("@/features/Role/routes"));
 const PermissionRoutes = lazy(() => import("@/features/Permission/routes"));
 const ProductRoutes = lazy(() => import("@/features/Product/routes"));
-
+const SupplierRoutes = lazy(() => import("@/features/Supplier/routes"));
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isAuthChecked } = useAuthContext();
   if (!isAuthChecked) return <FullPageLoading />;
@@ -52,6 +52,11 @@ const PrivateRoutes: RouteObject[] = [
       {
         path: path.ProductManagement + "/*",
         element: <ProductRoutes />,
+        errorElement: <ErrorFallback />,
+      },
+      {
+        path: path.SupplierManagement + "/*",
+        element: <SupplierRoutes />,
         errorElement: <ErrorFallback />,
       },
       {

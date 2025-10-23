@@ -67,6 +67,7 @@ const RenderField: React.FC<RenderFieldProps> = ({
                     isClearable
                     hasError={!!fieldState?.error}
                     placeholder={placeholder}
+                    isDisabled={disabled}
                   />
                 ) : (
                   <Input
@@ -74,9 +75,9 @@ const RenderField: React.FC<RenderFieldProps> = ({
                     placeholder={placeholder}
                     {...field}
                     disabled={disabled}
-                    className={
+                    className={`${
                       fieldState?.error ? "border border-destructive" : ""
-                    }
+                    } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`}
                     allowDecimal={allowDecimal}
                   />
                 )}

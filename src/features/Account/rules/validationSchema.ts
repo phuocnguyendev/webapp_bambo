@@ -7,9 +7,8 @@ export const AccountCreateSchema = z.object({
     .min(2, { message: "Tên tối thiểu 2 ký tự" }),
 
   Email: z
-    .string()
-    .nonempty({ message: "Email không được để trống" })
-    .email({ message: "Email không hợp lệ" }),
+    .email({ message: "Email không hợp lệ" })
+    .max(100, { message: "Email không được vượt quá 100 ký tự" }),
 
   Phone: z
     .string()
