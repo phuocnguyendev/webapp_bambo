@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { NumericFormat } from 'react-number-format';
-import { cn } from '@/lib/utils';
-import { Euro } from 'lucide-react';
+import * as React from "react";
+import { NumericFormat } from "react-number-format";
+import { cn } from "@/lib/utils";
+import { Euro } from "lucide-react";
 
 const InputCurrency = React.forwardRef<
-  React.ElementRef<typeof NumericFormat>,
+  React.ComponentRef<typeof NumericFormat>,
   React.ComponentPropsWithoutRef<typeof NumericFormat>
 >(({ className, value, ...props }, ref) => {
   return (
-    <div ref={ref} className={cn('form-control', className)}>
+    <div ref={ref} className={cn("form-control", className)}>
       <div className="flex items-center gap-1 w-full">
         <Euro size={18} />
         <NumericFormat
@@ -21,12 +21,12 @@ const InputCurrency = React.forwardRef<
           inputMode="numeric"
           allowNegative={props.allowNegative || false}
           allowLeadingZeros={props.allowLeadingZeros || false}
-          value={value ? Number(value) : ''}
+          value={value ? Number(value) : ""}
         />
       </div>
     </div>
   );
 });
-InputCurrency.displayName = 'InputCurrency';
+InputCurrency.displayName = "InputCurrency";
 
 export { InputCurrency };

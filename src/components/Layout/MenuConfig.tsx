@@ -155,7 +155,7 @@ export const MenuConfig: SidebarMenuItem[] = [
   },
   {
     label: "Kho hàng",
-    path: "/warehouse",
+    path: path.WarehouseManagement,
     icon: <WarehouseIcon size={20} />,
     helmet: {
       title: "Kho hàng - Bamboo Warehouse",

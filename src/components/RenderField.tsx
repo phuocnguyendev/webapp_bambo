@@ -11,7 +11,7 @@ import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
 interface RenderFieldProps {
-  control: any;
+  control?: any;
   name: string;
   label?: string;
   placeholder?: string;

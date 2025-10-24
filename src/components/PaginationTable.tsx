@@ -41,7 +41,6 @@ import React, { type JSX } from "react";
 import { When } from "react-if";
 import { Select } from "./ui/select";
 import { isBoolean } from "lodash";
-// removed unused useTranslation
 
 const paginationSize = 7;
 
@@ -59,25 +58,18 @@ export type ColumnDefCustom<T> = ColumnDef<T> & {
   renderHeader?: () => JSX.Element;
 };
 
-// ✨ Props mới theo PageModel
 interface PaginationTableProps<T> {
   columns: ColumnDefCustom<T>[];
-  // pageModel can be a PageModelResponse<T> or a plain array of T
   pageModel?: PageModelResponse<T> | T[];
   isLoading: boolean;
-
-  currentPage?: number; // trang hiện tại (bắt đầu từ 1)
-  pageSize?: number; // số bản ghi/trang
-
+  currentPage?: number;
+  pageSize?: number;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
-
   onRowClick?: (row: Row<T>) => void;
   onCellClick?: (cell: Cell<T, unknown>) => void;
-
   tableState?: Partial<TableState> | undefined;
   onSortingChange?: (sorting: SortingState) => void;
-
   tableClassName?: string;
   tableHeaderClassName?: string;
   tableRowClassName?: (row: Row<T>) => string;
@@ -85,6 +77,7 @@ interface PaginationTableProps<T> {
   tableWrapperStyle?: React.CSSProperties;
   tableWrapperClassName?: string;
   id?: string;
+  onTableInstance?: (table: any) => void;
 }
 
 const PaginationTable = <T,>({
@@ -103,6 +96,7 @@ const PaginationTable = <T,>({
   tableHeaderClassName,
   tableRowClassName,
   id = "paginationTable",
+  onTableInstance,
 }: PaginationTableProps<T>) => {
   let data: T[] = [];
   let total = 0;
@@ -129,6 +123,11 @@ const PaginationTable = <T,>({
     manualSorting: true,
     state: tableState,
   });
+  React.useEffect(() => {
+    if (typeof onTableInstance === "function") {
+      onTableInstance(table);
+    }
+  }, [table, onTableInstance]);
   return (
     <div className="flex flex-col space-y-4 w-full">
       <Table className={tableClassName + " overflow-x-auto"} id={id}>

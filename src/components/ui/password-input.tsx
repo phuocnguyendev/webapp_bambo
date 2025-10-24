@@ -85,7 +85,7 @@ interface PasswordInputProps
 }
 
 const PasswordInput = React.forwardRef<
-  React.ElementRef<typeof Input>,
+  React.ComponentRef<typeof Input>,
   PasswordInputProps
 >(
   (

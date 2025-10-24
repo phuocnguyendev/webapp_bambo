@@ -26,6 +26,7 @@ export const supplierValidationSchema = z.object({
 
   Address: z
     .string()
+    .nonempty({ message: "Địa chỉ không được để trống" })
     .min(5, { message: "Địa chỉ phải có ít nhất 5 ký tự" })
     .max(200, { message: "Địa chỉ không được vượt quá 200 ký tự" }),
 

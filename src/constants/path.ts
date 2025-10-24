@@ -17,4 +17,9 @@ export const path = {
   SupplierDetail: "/QuanLyNhaCungCap/:id",
   SupplierAdd: "/QuanLyNhaCungCap/ThemMoi",
   AddSupplierExcel: "/QuanLyNhaCungCap/Excel",
+
+  // Warehouse Management
+  WarehouseManagement: "/QuanLyKho",
+  WarehouseDetail: "/QuanLyKho/:id",
+  AddWarehouseExcel: "/QuanLyKho/Excel",
 };
