@@ -41,7 +41,6 @@ import React, { type JSX } from "react";
 import { When } from "react-if";
 import { Select } from "./ui/select";
 import { isBoolean } from "lodash";
-import { useTranslation } from "react-i18next";
 
 const paginationSize = 7;
 
@@ -59,28 +58,26 @@ export type ColumnDefCustom<T> = ColumnDef<T> & {
   renderHeader?: () => JSX.Element;
 };
 
-// ✨ Props mới theo PageModel
 interface PaginationTableProps<T> {
   columns: ColumnDefCustom<T>[];
-  pageModel: PageModelResponse<T>;
+  pageModel?: PageModelResponse<T> | T[];
   isLoading: boolean;
-
-  currentPage?: number; // trang hiện tại (bắt đầu từ 1)
-  pageSize?: number; // số bản ghi/trang
-
+  currentPage?: number;
+  pageSize?: number;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
-
   onRowClick?: (row: Row<T>) => void;
   onCellClick?: (cell: Cell<T, unknown>) => void;
-
   tableState?: Partial<TableState> | undefined;
   onSortingChange?: (sorting: SortingState) => void;
-
   tableClassName?: string;
   tableHeaderClassName?: string;
   tableRowClassName?: (row: Row<T>) => string;
+  tableStyle?: React.CSSProperties;
+  tableWrapperStyle?: React.CSSProperties;
+  tableWrapperClassName?: string;
   id?: string;
+  onTableInstance?: (table: any) => void;
 }
 
 const PaginationTable = <T,>({
@@ -99,9 +96,18 @@ const PaginationTable = <T,>({
   tableHeaderClassName,
   tableRowClassName,
   id = "paginationTable",
+  onTableInstance,
 }: PaginationTableProps<T>) => {
-  const data = pageModel?.ListModel || pageModel || [];
-  const total = pageModel?.Count ?? 0;
+  let data: T[] = [];
+  let total = 0;
+  if (Array.isArray(pageModel)) {
+    data = pageModel as T[];
+    total = data.length;
+  } else if (pageModel && typeof pageModel === "object") {
+    const pm = pageModel as unknown as { ListModel?: T[]; Count?: number };
+    data = pm.ListModel ?? [];
+    total = typeof pm.Count === "number" ? pm.Count : data.length;
+  }
   const totalPage = Math.max(1, Math.ceil(total / (pageSize || 1)));
 
   const table = useReactTable({
@@ -117,9 +123,14 @@ const PaginationTable = <T,>({
     manualSorting: true,
     state: tableState,
   });
+  React.useEffect(() => {
+    if (typeof onTableInstance === "function") {
+      onTableInstance(table);
+    }
+  }, [table, onTableInstance]);
   return (
     <div className="flex flex-col space-y-4 w-full">
-      <Table className={tableClassName} id={id}>
+      <Table className={tableClassName + " overflow-x-auto"} id={id}>
         <TableHeader
           className={cn(
             "bg-green-700 text-white rounded-t-lg",
@@ -269,7 +280,7 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
   onPageSizeChange,
   onPageChange,
 }) => {
-  const { t } = useTranslation();
+  // translation not required here
 
   // range bản ghi đang hiển thị
   const startIndex = total === 0 ? 0 : (currentPage - 1) * pageSize + 1;

@@ -2,9 +2,8 @@ import * as z from "zod";
 
 export const loginSchema = z.object({
   email: z
-    .string()
-    .nonempty({ message: "Vui lòng nhập email" })
-    .email({ message: "Email không đúng định dạng" }),
+    .email({ message: "Email không đúng định dạng" })
+    .max(100, { message: "Email không được vượt quá 100 ký tự" }),
   password: z
     .string()
     .nonempty({ message: "Vui lòng nhập mật khẩu" })

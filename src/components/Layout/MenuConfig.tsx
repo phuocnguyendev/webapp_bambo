@@ -137,7 +137,7 @@ export const MenuConfig: SidebarMenuItem[] = [
   },
   {
     label: "Nhà cung cấp",
-    path: "/supplier",
+    path: path.SupplierManagement,
     icon: <Truck size={20} />,
     helmet: {
       title: "Nhà cung cấp - Bamboo Warehouse",
@@ -155,7 +155,7 @@ export const MenuConfig: SidebarMenuItem[] = [
   },
   {
     label: "Kho hàng",
-    path: "/warehouse",
+    path: path.WarehouseManagement,
     icon: <WarehouseIcon size={20} />,
     helmet: {
       title: "Kho hàng - Bamboo Warehouse",

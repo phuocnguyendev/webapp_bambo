@@ -1,10 +1,10 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from "react";
 
-import { cn } from '@/lib/utils';
-import MaskInputTime from './MaskInputTime';
-import RdtPicker from './RdtPicker';
+import { cn } from "@/lib/utils";
+import MaskInputTime from "./MaskInputTime";
+import RdtPicker from "./RdtPicker";
 
-const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
+const TimeViewInput = forwardRef<React.ComponentRef<typeof RdtPicker>, any>(
   (props: any, ref) => {
     const { position, value, maxDigitsHours, disabled, onChange } = props;
     const timeConstraints = {
@@ -35,12 +35,12 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
     // Generate a random string for the input reference
 
     const inputRef = useRef(
-      `input-time_${Math.random().toString(36).substring(7)}__mask`,
+      `input-time_${Math.random().toString(36).substring(7)}__mask`
     );
 
     useEffect(() => {
       if (value) {
-        const [hours, minutes] = value.split(':');
+        const [hours, minutes] = value.split(":");
         setInputValues({
           hours: parseInt(hours, 10),
           minutes: parseInt(minutes, 10),
@@ -52,7 +52,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
       const handleClickOutside = (event: any) => {
         const outsideInput =
           openCalendar &&
-          !event.target.closest('.rdtPicker') &&
+          !event.target.closest(".rdtPicker") &&
           !event.target.closest(`.${inputRef.current}`);
 
         if (outsideInput) {
@@ -60,10 +60,10 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
         }
       };
 
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
 
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
     }, [openCalendar, inputRef]);
 
@@ -81,7 +81,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
       setInputValues(nextTime);
 
       const nextValue = `${renderValue(nextTime.hours)}:${renderValue(
-        nextTime.minutes,
+        nextTime.minutes
       )}`;
 
       onChange({
@@ -121,7 +121,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
 
     const handleIncease = (
       e: React.MouseEvent<HTMLElement>,
-      type: keyof typeof inputValues,
+      type: keyof typeof inputValues
     ) => {
       e.preventDefault();
       increase(type);
@@ -129,7 +129,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
 
     const handleDecrease = (
       e: React.MouseEvent<HTMLElement>,
-      type: keyof typeof inputValues,
+      type: keyof typeof inputValues
     ) => {
       e.preventDefault();
       decrease(type);
@@ -151,12 +151,12 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
           onChange={onChange}
           refClassName={inputRef?.current}
           maxDigitsHours={maxDigitsHours}
-          className={cn('rdtInput', { 'bg-muted border-0': disabled })}
+          className={cn("rdtInput", { "bg-muted border-0": disabled })}
           handleFocus={handleFocusInput}
           handleBlur={handleBlurInput}
         />
 
-        <div className={cn('rdt', openCalendar && 'rdtOpen')}>
+        <div className={cn("rdt", openCalendar && "rdtOpen")}>
           <div
             className="rdtPicker"
             onMouseEnter={() => {
@@ -182,7 +182,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
                           <button
                             className="rdtBtn"
                             onClick={(e: React.MouseEvent<HTMLElement>) => {
-                              handleIncease(e, 'hours');
+                              handleIncease(e, "hours");
                             }}
                           >
                             ▲
@@ -193,7 +193,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
                           <button
                             className="rdtBtn"
                             onClick={(e: React.MouseEvent<HTMLElement>) => {
-                              handleDecrease(e, 'hours');
+                              handleDecrease(e, "hours");
                             }}
                           >
                             ▼
@@ -204,7 +204,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
                           <button
                             className="rdtBtn"
                             onClick={(e: React.MouseEvent<HTMLElement>) => {
-                              handleIncease(e, 'minutes');
+                              handleIncease(e, "minutes");
                             }}
                           >
                             ▲
@@ -217,7 +217,7 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
                           <button
                             className="rdtBtn"
                             onClick={(e: React.MouseEvent<HTMLElement>) => {
-                              handleDecrease(e, 'minutes');
+                              handleDecrease(e, "minutes");
                             }}
                           >
                             ▼
@@ -233,9 +233,9 @@ const TimeViewInput = forwardRef<React.ElementRef<typeof RdtPicker>, any>(
         </div>
       </RdtPicker>
     );
-  },
+  }
 );
 
-TimeViewInput.displayName = 'TimeViewInput';
+TimeViewInput.displayName = "TimeViewInput";
 
 export default TimeViewInput;

@@ -10,5 +10,16 @@ export const path = {
   ProductManagement: "/QuanLySanPham/SanPham",
   ProductDetail: "/QuanLySanPham/SanPham/:id",
   ProductAdd: "/QuanLySanPham/SanPham/ThemMoi",
-  AddProductExcel: "/QuanLySanPham/ThemSanPhamExcel",
+  AddProductExcel: "/QuanLySanPham/SanPham/Excel",
+
+  // Supplier Management
+  SupplierManagement: "/QuanLyNhaCungCap",
+  SupplierDetail: "/QuanLyNhaCungCap/:id",
+  SupplierAdd: "/QuanLyNhaCungCap/ThemMoi",
+  AddSupplierExcel: "/QuanLyNhaCungCap/Excel",
+
+  // Warehouse Management
+  WarehouseManagement: "/QuanLyKho",
+  WarehouseDetail: "/QuanLyKho/:id",
+  AddWarehouseExcel: "/QuanLyKho/Excel",
 };

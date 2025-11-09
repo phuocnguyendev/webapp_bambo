@@ -23,3 +23,8 @@ type Option = {
   label: string;
   value: string | number;
 };
+
+type ResponseExcel<T = {}> = {
+  Data: T;
+  ErrorDetail: {};
+};

@@ -23,7 +23,7 @@ const CalenderGroup = styled.div`
 `;
 
 const Calendar = React.forwardRef<
-  React.ElementRef<typeof DatePicker>,
+  React.ComponentRef<typeof DatePicker>,
   DatePickerProps
 >(({ className, ...props }, ref) => {
   return (

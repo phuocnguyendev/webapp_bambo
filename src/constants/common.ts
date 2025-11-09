@@ -8,3 +8,10 @@ export const STATUS_ACTIVE = [
 
 export const UUID_REGEX =
   /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+
+export const STATUS_WAREHOUSE_OPTIONS = [
+  { label: "Đang hoạt động", value: 1 },
+  { label: "Ngừng hoạt động", value: 2 },
+  { label: "Bảo trì", value: 3 },
+  { label: "Chờ phê duyệt", value: 4 },
+];

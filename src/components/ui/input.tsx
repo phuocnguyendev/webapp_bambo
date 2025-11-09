@@ -8,9 +8,16 @@ export interface InputProps
   trimOnBlur?: boolean;
   className?: string;
   inputClassName?: string;
+  allowDecimal?: boolean;
 }
 
-const isNumberValueValid = (value: string) => /^\d*$/.test(value);
+const isNumberValueValid = (value: string, allowDecimal = false) => {
+  if (allowDecimal) {
+    return /^(\d+(\.\d*)?|\.\d*)?$/.test(value);
+  }
+  return /^\d*$/.test(value);
+};
+
 const isAlphaOrSpaceOnly = (value: string) => /^[\p{L}\s]*$/u.test(value);
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -23,13 +30,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onBlur,
       ignoreSpecificChar = false,
       trimOnBlur = true,
+      allowDecimal = false,
       ...props
     },
     ref
   ) => {
     const isValidWholeValue = (v: string) =>
       type === "number"
-        ? isNumberValueValid(v)
+        ? isNumberValueValid(v, allowDecimal)
         : ignoreSpecificChar
         ? isAlphaOrSpaceOnly(v)
         : true;
@@ -59,8 +67,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           type={type}
-          inputMode={type === "number" ? "numeric" : props.inputMode}
-          pattern={type === "number" ? "\\d*" : props.pattern}
+          inputMode={
+            type === "number"
+              ? allowDecimal
+                ? "decimal"
+                : "numeric"
+              : props.inputMode
+          }
+          pattern={
+            type === "number"
+              ? allowDecimal
+                ? "[0-9]*[.,]?[0-9]*"
+                : "\\d*"
+              : props.pattern
+          }
           {...props}
           className={cn(
             "w-full p-0 m-0 border-0 outline-none bg-transparent",
@@ -73,6 +93,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
+
 Input.displayName = "Input";
 
 export { Input };

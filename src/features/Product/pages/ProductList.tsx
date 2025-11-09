@@ -13,6 +13,7 @@ import { useDeleteProduct, useProductList } from "../hooks/useProduct";
 import getProductColumns from "../config/productColumns";
 import SearchForm from "../components/SearchForm";
 import { path } from "@/constants/path";
+import { ExcelIcon } from "@/assets/svg";
 
 const ProductList = () => {
   const { data, isLoading, isError } = useProductList();
@@ -40,6 +41,10 @@ const ProductList = () => {
 
   const handleAddNew = () => {
     navigate(path.ProductAdd);
+  };
+
+  const handleAddNewExcel = () => {
+    navigate(path.AddProductExcel);
   };
 
   const handleConfirmDelete = async () => {
@@ -77,13 +82,20 @@ const ProductList = () => {
         <Title title="Quản lý sản phẩm" />
       </div>
       <SearchForm />
-      <div className="mb-2">
+      <div className="mb-2 gap-x-3 flex">
         <Button
           variant="default"
           icon={<CirclePlus size={16} />}
           onClick={handleAddNew}
         >
           Thêm mới
+        </Button>
+        <Button
+          variant="default"
+          icon={<ExcelIcon />}
+          onClick={handleAddNewExcel}
+        >
+          Thêm mới từ file Excel
         </Button>
       </div>
 

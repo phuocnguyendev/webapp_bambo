@@ -11,7 +11,7 @@ import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
 interface RenderFieldProps {
-  control: any;
+  control?: any;
   name: string;
   label?: string;
   placeholder?: string;
@@ -20,6 +20,7 @@ interface RenderFieldProps {
   isSwitch?: boolean;
   disabled?: boolean;
   className?: string;
+  allowDecimal?: boolean;
 }
 
 const RenderField: React.FC<RenderFieldProps> = ({
@@ -32,6 +33,7 @@ const RenderField: React.FC<RenderFieldProps> = ({
   isSwitch = false,
   disabled = false,
   className,
+  allowDecimal = false,
 }) => {
   return (
     <FormField
@@ -65,6 +67,7 @@ const RenderField: React.FC<RenderFieldProps> = ({
                     isClearable
                     hasError={!!fieldState?.error}
                     placeholder={placeholder}
+                    isDisabled={disabled}
                   />
                 ) : (
                   <Input
@@ -72,9 +75,10 @@ const RenderField: React.FC<RenderFieldProps> = ({
                     placeholder={placeholder}
                     {...field}
                     disabled={disabled}
-                    className={
+                    className={`${
                       fieldState?.error ? "border border-destructive" : ""
-                    }
+                    } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                    allowDecimal={allowDecimal}
                   />
                 )}
               </FormControl>

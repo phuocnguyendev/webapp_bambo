@@ -108,7 +108,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
           (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
             raw
           )
-            ? "Chi tiết"
+            ? "Xem Chi tiết"
             : raw.charAt(0).toUpperCase() + raw.slice(1));
         crumbs.push({ label, path: acc });
       }
