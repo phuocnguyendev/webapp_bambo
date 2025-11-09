@@ -80,6 +80,7 @@ axiosInstance.interceptors.response.use(
       _retry?: boolean;
     };
     const errorResponse: ErrorResponse = error?.response?.data as ErrorResponse;
+    console.log(errorResponse);
 
     if (
       ![HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden].includes(
@@ -101,8 +102,8 @@ axiosInstance.interceptors.response.use(
 
     if (
       (error.response?.status === HttpStatusCode.Unauthorized &&
-        errorResponse?.errorMessage?.includes("InvalidToken")) ||
-      errorResponse?.errorMessage?.includes("Invalid or expired refresh token")
+        errorResponse?.message?.includes("InvalidToken")) ||
+      errorResponse?.message?.includes("Invalid or expired refresh token")
     ) {
       clearTokens();
       if (typeof window !== "undefined") {
@@ -113,7 +114,7 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.response?.status === HttpStatusCode.Unauthorized &&
-      errorResponse?.errorMessage?.includes("TokenExpired") &&
+      errorResponse?.message?.includes("Token hết hạn") &&
       refreshToken &&
       !originalRequest._retry
     ) {

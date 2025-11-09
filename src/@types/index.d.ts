@@ -10,8 +10,9 @@ type PageModelResponse<T> = {
 };
 
 type ErrorResponse = {
-  errorMessage: string;
-  code: string;
+  error: string;
+  message: string;
+  statusCode: number;
 };
 
 type FailedQueueItem = {
